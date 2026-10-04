@@ -1,0 +1,1227 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#0B0B10">
+<title>SYNORA - One Sound. Every Speaker.</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0B0B10;--panel:#17171F;--ink:#EDEAE4;--mute:#A6A7B3;--gold:#D9B86C;--silver:#DDE2EA;--ok:#5FD08A;--warn:#E8B26A;--bad:#EF7A86;--head:"Cinzel",Georgia,serif;--body:"Jost",system-ui,sans-serif}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 16px/1.5 var(--body)}
+.bg{position:fixed;inset:0;pointer-events:none;overflow:hidden;background:
+radial-gradient(55% 35% at 12% 8%,rgba(244,198,224,.16),transparent 70%),radial-gradient(50% 32% at 92% 28%,rgba(191,232,255,.15),transparent 70%),
+radial-gradient(60% 38% at 20% 92%,rgba(233,245,201,.11),transparent 70%),radial-gradient(45% 30% at 88% 88%,rgba(217,184,108,.16),transparent 70%),
+repeating-linear-gradient(45deg,rgba(217,184,108,.09) 0 1px,transparent 1px 44px),repeating-linear-gradient(-45deg,rgba(217,184,108,.09) 0 1px,transparent 1px 44px)}
+.bg::before{content:"";position:absolute;inset:0;background:linear-gradient(115deg,transparent 38%,rgba(255,255,255,.08) 46%,rgba(244,198,224,.10) 49%,rgba(191,232,255,.10) 52%,rgba(233,245,201,.08) 55%,transparent 62%);background-size:300% 100%;background-position:100% 0}
+.gem{position:absolute;width:var(--s);height:var(--s);background:radial-gradient(circle,#fff 0,#fff 25%,#EAF0F8 60%);clip-path:polygon(50% 0,58% 42%,100% 50%,58% 58%,50% 100%,42% 58%,0 50%,42% 42%);opacity:.75}
+.frame{position:fixed;inset:7px;border:1px solid rgba(217,184,108,.45);border-radius:6px;pointer-events:none}
+.frame::before{content:"";position:absolute;inset:4px;border:1px solid rgba(217,184,108,.2);border-radius:4px}
+.frame i{position:absolute;font-style:normal;color:var(--gold);font-size:12px;line-height:1;background:var(--bg);padding:2px}
+@media(prefers-reduced-motion:no-preference){.gem{animation:gl 4.5s ease-in-out infinite;animation-delay:var(--d)}.bg::before{animation:rf 9s ease-in-out infinite alternate}h1{animation:sh 7s linear infinite}}
+@keyframes gl{0%,100%{opacity:.15;transform:scale(.6)}50%{opacity:1;transform:scale(1.1)}}@keyframes rf{to{background-position:0 0}}@keyframes sh{to{background-position:-250% 0}}
+main{position:relative;z-index:1;max-width:560px;margin:0 auto;padding:16px 16px 56px}
+h1{font:700 2.5rem/1.1 var(--head);letter-spacing:.2em;margin:6px 0 0;text-align:center;color:transparent;-webkit-background-clip:text;background-clip:text;background-size:250% 100%;
+background-image:linear-gradient(100deg,#B9BEC8 10%,#fff 22%,#F4C6E0 34%,#BFE8FF 46%,#E9F5C9 58%,#fff 70%,#B9BEC8 85%)}
+.tag{font:300 1rem var(--body);letter-spacing:.3em;color:var(--gold);text-align:center;margin:2px 0 0;text-transform:uppercase}
+.gl{display:flex;align-items:center;gap:10px;color:var(--gold);margin:10px 0 16px}
+.gl::before,.gl::after{content:"";flex:1;height:1px;background:linear-gradient(90deg,transparent,var(--gold))}.gl::after{transform:scaleX(-1)}
+.card{border:1px solid transparent;border-radius:14px;padding:16px;margin:14px 0;background:linear-gradient(var(--panel),var(--panel)) padding-box,linear-gradient(135deg,#F0D590,#8E6F2F 30%,#EAF0F8 55%,#B8964A 80%,#F0D590) border-box}
+.card{position:relative;margin:28px 0}
+.card::before{content:"";position:absolute;left:14%;right:14%;top:-15px;height:1px;background:linear-gradient(90deg,transparent,#D9B86C,#EAF0F8,#D9B86C,transparent)}
+.card::after{content:"\25C6";position:absolute;top:-23px;left:50%;transform:translateX(-50%);font-size:11px;line-height:1;color:var(--gold);background:var(--bg);padding:0 8px}
+h2{font:500 1.05rem var(--head);letter-spacing:.12em;margin:0 0 12px;color:var(--silver)}
+h2::before{content:"◆ ";color:var(--gold);font-size:.7em}
+button{font:500 .95rem var(--body);letter-spacing:.04em;padding:10px 16px;border:0;border-radius:999px;cursor:pointer;color:#1B1405;background:linear-gradient(180deg,#F5DDA0,#C09A4B);box-shadow:inset 0 1px 0 rgba(255,255,255,.55)}
+button.alt,.ic{background:transparent;color:var(--silver);box-shadow:none;border:1px solid #8E94A3}
+button.on{background:linear-gradient(180deg,#F5DDA0,#C09A4B);color:#1B1405;border-color:transparent}
+button:disabled{opacity:.35;cursor:default}
+button:focus-visible,input:focus-visible{outline:2px solid #fff;outline-offset:3px}
+.ic{padding:0;width:34px;height:34px;font-size:.9rem}
+input[type=text]{font:inherit;width:7.5em;padding:10px;text-align:center;letter-spacing:.3em;text-transform:uppercase;background:#0B0B10;color:var(--silver);caret-color:var(--silver);border:1px solid var(--gold);border-radius:8px}
+#btnJoin{color:var(--silver);border:1px solid var(--silver)}
+input[type=file]{color:var(--mute);font-size:.9rem;max-width:100%}
+input[type=file]::file-selector-button{font:inherit;margin-right:10px;padding:7px 14px;border-radius:999px;border:1px solid var(--gold);background:transparent;color:var(--gold)}
+input[type=range]{width:100%;accent-color:var(--gold)}
+.row{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:10px 0}
+.back-btn{display:inline-flex;align-items:center;gap:5px;padding:5px 13px 5px 9px;font-size:.8rem}
+.note{color:var(--mute);font-size:.85rem;margin:10px 0 0}
+.lbl{display:block;color:var(--mute);font-size:.78rem}
+.roombar{display:flex;justify-content:space-between;align-items:flex-end;gap:12px}
+.code{font:700 1.9rem/1.1 var(--head);letter-spacing:.2em;color:var(--gold)}
+.linkrow{display:flex;gap:10px;align-items:center;margin-top:12px}
+#link{flex:1;color:var(--mute);font-size:.78rem;word-break:break-all}
+.linkrow button{padding:6px 12px;font-size:.8rem}
+#nowName{font:500 1.15rem var(--head);text-align:center;margin:0}
+.big{font:500 3.2rem/1.1 var(--head);text-align:center;font-variant-numeric:tabular-nums;margin:6px 0}
+.ctl{display:flex;justify-content:center;align-items:center;gap:14px;margin:10px 0}
+#btnPlay{width:68px;height:68px;font-size:1.4rem;padding:0}
+.ctl .ic{width:48px;height:48px;font-size:1.1rem}
+.badge{display:block;text-align:center;font-size:.85rem;color:var(--mute);margin:4px 0 10px}.badge.ok{color:var(--gold)}
+.small button{padding:7px 14px;font-size:.82rem}
+.bar{position:relative;height:16px;background:#0A0A0F;border:1px solid rgba(221,226,234,.3);border-radius:8px;overflow:hidden}
+.bar i{position:absolute;inset:0}.bar b{position:absolute;inset:0;display:grid;place-items:center;font:500 .7rem var(--body);color:#fff;text-shadow:0 0 3px #000,0 0 3px #000}
+ul{list-style:none;margin:0;padding:0}
+#devList li{display:grid;grid-template-columns:28px 1fr auto;gap:2px 10px;align-items:center;padding:8px 0;border-top:1px solid rgba(217,184,108,.18)}
+#devList li:first-child{border-top:0}.ds{font-size:.82rem;color:var(--gold)}#devList .bar{grid-column:2/4}
+#libList li{padding:10px 0;border-top:1px solid rgba(217,184,108,.18);display:grid;grid-template-columns:1fr auto;gap:6px 10px;align-items:center}
+#libList li:first-child{border-top:0}#libList li.cur .nm{color:var(--gold)}
+.trk{display:flex;align-items:center;gap:10px;min-width:0}.nm{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.dia{color:var(--gold);width:34px;text-align:center}
+.tick{color:var(--ok);font-weight:700}.mv{display:flex;gap:6px}.empty{color:var(--mute)}
+dl{display:grid;grid-template-columns:auto 1fr;gap:5px 18px;margin:0}dt{color:var(--mute)}dd{margin:0;font-variant-numeric:tabular-nums}
+.good{color:var(--gold);font-weight:500}.fair{color:var(--warn);font-weight:500}.poor{color:var(--bad);font-weight:500}
+canvas{width:100%;height:130px;display:block;background:#0A0A0F;border:1px solid rgba(217,184,108,.4);border-radius:8px}
+pre{background:#0A0A0F;color:#DAD6CE;border:1px solid rgba(217,184,108,.25);padding:10px;border-radius:8px;max-height:170px;overflow:auto;font-size:.78rem;white-space:pre-wrap;margin:0}
+#alert{position:fixed;left:16px;right:16px;bottom:16px;max-width:528px;margin:0 auto;z-index:60;background:#2C1519;border:1px solid var(--bad);color:#FFD9DC;border-radius:10px;padding:10px 14px;box-shadow:0 6px 24px rgba(0,0,0,.6)}
+.foot{color:var(--mute);font-size:.8rem;text-align:center;margin-top:24px}
+#devList .dact{grid-column:2/4;display:flex;gap:8px;margin-top:4px}.dact button{padding:5px 12px;font-size:.78rem}
+#modal,#leaveModal{position:fixed;inset:0;background:rgba(5,5,8,.82);display:grid;place-items:center;z-index:50;padding:20px}.mbox{max-width:360px;border:1px solid var(--gold);border-radius:14px;background:var(--panel);padding:20px;text-align:center}
+#propList li{padding:10px 0;border-top:1px solid rgba(217,184,108,.18);display:grid;gap:4px}#propList li:first-child{border-top:0}#propList .dact{display:flex;gap:8px;margin-top:4px}
+#libList li{user-select:none;-webkit-user-select:none;-webkit-touch-callout:none}.rm{border-color:#EF7A86!important}
+.bar u{position:absolute;top:0;bottom:0;display:flex;align-items:center;font:500 .55rem var(--body);letter-spacing:.04em;text-decoration:none;color:#fff;text-shadow:0 0 2px #000,0 0 2px #000;pointer-events:none}
+.bar i.fx-s{animation:sweep 2.4s linear infinite}.bar i.fx-p{animation:pulse 1.5s ease-in-out infinite alternate}
+.bar i.fx-sp{animation:sweep 2.6s linear infinite,pulse 1.8s ease-in-out infinite alternate}.bar i.fx-h{animation:sweep 3s linear infinite,hue 6s linear infinite}
+@keyframes sweep{from{background-position:130% 0,0 0}to{background-position:-40% 0,0 0}}
+@keyframes pulse{from{filter:brightness(.85)}to{filter:brightness(1.35)}}@keyframes hue{to{filter:hue-rotate(360deg)}}
+.mbox .row{margin-top:46px;gap:22px}
+.lb{position:relative;z-index:3;font-weight:600}
+.hot .lb{font-size:1.08rem;letter-spacing:.06em;color:#fff;-webkit-text-stroke:.5px #2a0500;text-shadow:0 1px 2px #000,0 0 8px #000,0 0 16px rgba(0,0,0,.85)}
+.hot .lb::before{content:"";position:absolute;inset:-6px -14px;z-index:-1;border-radius:50%;background:radial-gradient(ellipse,rgba(20,2,0,.82),rgba(20,2,0,0) 72%)}
+.hot:active,.ice:active{transform:scale(.95)}
+@keyframes throb{from{transform:scale(1)}to{transform:scale(1.035)}}@keyframes bob{from{transform:translateY(0)}to{transform:translateY(-2px)}}
+.hot{position:relative;overflow:visible;color:#fff;border:0;background:radial-gradient(circle at 18% 62%,#050202 0 5px,transparent 6px),radial-gradient(circle at 46% 38%,#0b0504 0 4px,transparent 5px),radial-gradient(circle at 74% 66%,#050202 0 7px,transparent 8px),radial-gradient(circle at 90% 34%,#0b0504 0 3px,transparent 4px),linear-gradient(180deg,#3a0906,#8f1a0c 50%,#ff5f1a);box-shadow:0 6px 22px rgba(255,90,20,.75);animation:heat 1.4s ease-in-out infinite alternate,throb .8s ease-in-out infinite alternate}
+@keyframes heat{from{filter:brightness(.92);box-shadow:0 6px 18px rgba(255,80,20,.6)}to{filter:brightness(1.18);box-shadow:0 6px 30px rgba(255,130,40,.95)}}
+.firecv{position:absolute;left:-14px;bottom:-10px;width:calc(100% + 28px);height:86px;z-index:1;pointer-events:none;background:none;border:0;border-radius:0}
+.ice{position:relative;overflow:visible;border:0;background:none;color:#06223D;padding:12px 26px;filter:drop-shadow(0 0 8px rgba(150,215,255,.85));animation:chill 2s ease-in-out infinite alternate,bob 2.6s ease-in-out infinite alternate}
+.ice::before{content:"";position:absolute;inset:0;z-index:0;clip-path:polygon(7% 14%,19% 0,33% 11%,49% 0,64% 10%,81% 0,94% 15%,100% 42%,95% 66%,100% 90%,85% 100%,67% 91%,51% 100%,34% 92%,17% 100%,4% 85%,0 58%,5% 34%);background:linear-gradient(115deg,transparent 30%,rgba(255,255,255,.85) 45%,transparent 60%) 0 0/250% 100% no-repeat,linear-gradient(160deg,rgba(255,255,255,.55) 0 18%,transparent 18% 100%),linear-gradient(20deg,transparent 0 58%,rgba(255,255,255,.35) 58% 64%,transparent 64%),linear-gradient(180deg,#F2FBFF,#9FD8F7 50%,#3F8EDB);animation:shimmer 2.8s linear infinite}
+.ice::after{content:"";position:absolute;left:6%;right:6%;top:-7px;height:11px;z-index:2;background:#fff;clip-path:polygon(0 100%,7% 35%,16% 75%,28% 8%,42% 62%,57% 18%,71% 72%,85% 28%,100% 100%)}
+.snowcv{position:absolute;left:-30px;top:-42px;width:calc(100% + 60px);height:calc(100% + 68px);z-index:2;pointer-events:none;background:none;border:0;border-radius:0}
+.ice .ik i{position:absolute;bottom:-13px;width:7px;background:linear-gradient(180deg,#F2FBFF,rgba(130,200,245,.25));clip-path:polygon(0 0,100% 0,50% 100%)}
+.ice .ik i:nth-child(1){left:14%;height:13px}.ice .ik i:nth-child(2){left:36%;height:19px}.ice .ik i:nth-child(3){left:60%;height:12px}.ice .ik i:nth-child(4){left:80%;height:16px}
+@keyframes shimmer{from{background-position:130% 0,0 0,0 0,0 0}to{background-position:-40% 0,0 0,0 0,0 0}}
+@keyframes chill{from{filter:drop-shadow(0 0 5px rgba(150,215,255,.6))}to{filter:drop-shadow(0 0 13px rgba(190,235,255,1))}}
+#paper{position:fixed;inset:0;z-index:90;overflow:hidden;background:#0B0B10;-webkit-mask-size:100% 100%;mask-size:100% 100%}
+#burnfx{position:fixed;inset:0;width:100%;height:100%;z-index:91;pointer-events:none;display:block;background:none;border:0;border-radius:0}
+@media(prefers-reduced-motion:reduce){.bar i,.hot,.ice,.ice::before,.rodfill,.rodfill i{animation:none!important}.rodfill{width:100%}}
+#rodBox{margin-top:16px;padding-top:16px;border-top:1px solid var(--line)}
+.rod{position:relative;height:16px;border-radius:8px;background:linear-gradient(180deg,#6b6f78,#2a2d33 55%,#4d515a);box-shadow:inset 0 1px 1px rgba(255,255,255,.25),inset 0 -2px 3px rgba(0,0,0,.6)}
+.rod::before{content:"";position:absolute;inset:0;border-radius:8px;z-index:2;pointer-events:none;background:radial-gradient(circle at 12% 55%,#0a0a0c 0 2.5px,transparent 3.5px),radial-gradient(circle at 37% 45%,#0a0a0c 0 2px,transparent 3px),radial-gradient(circle at 61% 60%,#0a0a0c 0 3px,transparent 4px),radial-gradient(circle at 86% 42%,#0a0a0c 0 2px,transparent 3px)}
+.rodfill{position:absolute;left:0;top:0;bottom:0;width:0;border-radius:8px;background:linear-gradient(90deg,#fff3c4,#ffd36a 12%,#ff9a2a 35%,#ff4d17 65%,#8f1a0c 88%,rgba(60,20,10,.4));box-shadow:0 0 16px rgba(255,110,30,.85);animation:heatup 14s cubic-bezier(.2,.7,.3,1) forwards,hflick .35s ease-in-out infinite alternate}
+.rodfill::before{content:"";position:absolute;right:-24px;top:-18px;width:56px;height:34px;background:radial-gradient(ellipse,rgba(255,150,40,.6),rgba(255,90,20,0) 70%);filter:blur(3px)}
+.rodfill i{position:absolute;right:2px;top:2px;width:3px;height:3px;border-radius:50%;background:#FFD27A;animation:rspark 1s linear infinite}
+.rodfill i:nth-child(2){animation-delay:-.35s;right:10px}.rodfill i:nth-child(3){animation-delay:-.7s;right:-4px}
+@keyframes heatup{to{width:100%}}@keyframes hflick{from{filter:brightness(.9)}to{filter:brightness(1.2)}}@keyframes rspark{from{transform:translate(0,0);opacity:1}to{transform:translate(5px,-26px);opacity:0}}
+#rodMsg{margin:12px 0 0;text-align:center;color:#FFE2C2;font-size:.95rem;letter-spacing:.02em}
+#rodBox.err .rodfill{display:none}#rodBox.err #rodMsg{color:#FFB3B8}
+[hidden]{display:none!important}
+</style>
+</head>
+<body>
+<div class="bg" aria-hidden="true"><i class="gem" style="left:4%;top:9%;--s:20px;--d:0s"></i><i class="gem" style="left:90%;top:6%;--s:16px;--d:1.2s"></i><i class="gem" style="left:8%;top:30%;--s:12px;--d:2.4s"></i><i class="gem" style="left:94%;top:38%;--s:18px;--d:0.6s"></i><i class="gem" style="left:3%;top:55%;--s:16px;--d:3.1s"></i><i class="gem" style="left:92%;top:62%;--s:12px;--d:1.8s"></i><i class="gem" style="left:6%;top:78%;--s:18px;--d:0.9s"></i><i class="gem" style="left:95%;top:85%;--s:16px;--d:2.7s"></i><i class="gem" style="left:48%;top:3%;--s:12px;--d:3.6s"></i><i class="gem" style="left:50%;top:97%;--s:14px;--d:1.5s"></i></div>
+<div class="frame" aria-hidden="true"><i style="left:-7px;top:-7px">&#9670;</i><i style="right:-7px;top:-7px">&#9670;</i><i style="left:-7px;bottom:-7px">&#9670;</i><i style="right:-7px;bottom:-7px">&#9670;</i></div>
+<main>
+  <div id="backRow" hidden><button type="button" id="btnLeave" class="alt back-btn" aria-label="Leave room and go back">&#8249; Back</button></div>
+  <h1>SYNORA</h1>
+  <p class="tag">One Sound. Every Speaker.</p>
+  <div class="gl">&#9670;</div>
+  <div id="alert" role="alert" hidden></div>
+
+  <section id="start" class="card">
+    <h2>Start a shared sound</h2>
+    <div class="row"><button id="btnHost">Host a room</button></div>
+    <div class="row"><input type="text" id="code" maxlength="4" placeholder="CODE" aria-label="Room code"><button id="btnJoin" class="alt">Join room</button></div>
+    <div class="row"><button id="btnRehost" class="alt">Re-join as host with this code</button></div>
+    <div class="row" id="resume" hidden><button id="btnResume"></button></div>
+    <div id="rodBox" hidden>
+      <div class="rod"><div class="rodfill"><i></i><i></i><i></i></div></div>
+      <p id="rodMsg"></p>
+      <div class="row" id="cancelRow" hidden style="justify-content:center"><button id="btnCancel" class="alt">Cancel</button></div>
+    </div>
+    <p class="note">Open this page on every phone. One phone hosts and the others join with the code. Tap a button on each phone: browsers need a tap before they can play sound. If a page was refreshed, tap Resume, or type the room code and re-join. Songs already on a phone are kept, so they are not sent again.</p>
+    <div class="row"><button id="btnPreview" class="alt" style="padding:6px 12px;font-size:.8rem">Preview leave animation</button></div>
+  </section>
+
+  <section id="room" class="card" hidden>
+    <div class="roombar">
+      <div><span class="lbl">Room code</span><span class="code" id="roomCode"></span></div>
+      <div><span class="lbl">Role</span><span id="role"></span></div>
+      <div><span class="lbl">Devices</span><span id="peers">-</span></div>
+    </div>
+    <div class="linkrow" id="linkRow"><span id="link"></span><button type="button" id="btnCopy" class="alt">Copy link</button></div>
+  </section>
+
+  <section id="player" class="card" hidden>
+    <p id="nowName">Built-in click track</p>
+    <div class="big" id="pos">0:00 / 2:00</div>
+    <input type="range" id="seek" min="0" max="1000" value="0" aria-label="Seek">
+    <div class="ctl">
+      <button id="btnPrev" class="ic" aria-label="Previous song">&#9198;</button>
+      <button id="btnPlay" aria-label="Play or pause">&#9654;</button>
+      <button id="btnNext" class="ic" aria-label="Next song">&#9197;</button>
+    </div>
+    <span class="badge" id="ready"></span>
+    <div class="row small" style="justify-content:center">
+      <button id="btnShuf" class="alt">Shuffle</button>
+      <button id="btnRepEach" class="alt">Each x1</button>
+      <button id="btnRepAll" class="alt">All x1</button>
+    </div>
+    <div class="row"><label class="lbl" for="vol" style="min-width:3.5em">Volume</label><input type="range" id="vol" min="0" max="100" value="80" style="flex:1" aria-label="Volume on this phone"></div>
+    <p class="note">Only the host has the play controls. Volume is for this phone only. There is a short gap of about 2 seconds between songs.</p>
+  </section>
+
+  <section id="devs" class="card" hidden>
+    <h2>Connected devices</h2>
+    <ul id="devList"></ul>
+    <p class="note">Gold arcs = Wi-Fi, gold bars = mobile data, ? = this browser does not say. Strength comes from the measured round-trip time. Make host gives that device the host role; you become a member like the others. Only a device that has all the songs can be chosen.</p>
+  </section>
+
+  <section id="lib" class="card" hidden>
+    <h2>Songs <span id="libCount" class="lbl" style="display:inline"></span></h2>
+    <div class="row" id="addRow"><input type="file" id="file" accept="audio/*" multiple aria-label="Add songs"></div>
+    <ul id="libList"></ul>
+    <p class="note">Songs are sent from the host to every phone before playing, and are cleared when the host closes the room. Keep to a few songs, because each one uses a lot of phone memory. On other devices, this button suggests a song; the host must approve it. Host: press and hold a song to show &#10060;, then tap it to remove the song for everyone.</p>
+  </section>
+
+  <section id="props" class="card" hidden>
+    <h2>File confirm list</h2>
+    <ul id="propList"></ul>
+    <p class="note">Songs suggested by other devices wait here: device, song, upload status. The host taps Add to put a song in the list for everyone, or Cancel. A song can be added once it says Uploaded. The suggesting device can cancel its own song.</p>
+  </section>
+
+  <section id="sync" class="card" hidden>
+    <h2>Sync health</h2>
+    <dl>
+      <dt>Health</dt><dd id="health">-</dd><dt>Drift since start</dt><dd id="drift">-</dd><dt>Offset spread</dt><dd id="spread">-</dd>
+      <dt>Round trip</dt><dd id="rtt">-</dd><dt>Clock offset</dt><dd id="offset">-</dd><dt>Clock rate difference</dt><dd id="ppm">-</dd>
+    </dl>
+    <p class="note">Offset is how far this phone's clock is from the host's. Health thresholds are guesses, not verified targets. Drift is shown, not corrected yet.</p>
+  </section>
+
+  <section id="tune" class="card" hidden>
+    <h2>Sync tuning (this phone)</h2>
+    <dl><dt>Trim</dt><dd id="trim">0.0 ms</dd><dt>Speed correction</dt><dd id="rate">-</dd></dl>
+    <div class="row small"><button class="alt nudge" data-n="-10">Later 10</button><button class="alt nudge" data-n="-1">Later 1</button><button class="alt nudge" data-n="1">Earlier 1</button><button class="alt nudge" data-n="10">Earlier 10</button></div>
+    <div class="row small"><button id="btnCal">Auto-calibrate</button><button id="btnTrim0" class="alt">Reset trim</button></div>
+    <p class="note">Trim moves this phone's sound earlier or later. If this phone sounds late, press Earlier. Auto-calibrate: the host plays with no songs (click track), wait 10 seconds, then tap it on each phone. It measures how late this phone is before the speaker. Speaker and Bluetooth delay still need tuning by ear or by recording. Speed correction is a tiny speed-up or slow-down (at most 0.3%) that keeps the phone locked to the host's timeline.</p>
+  </section>
+
+  <section id="meter" class="card" hidden>
+    <h2>Sync meter (microphone)</h2>
+    <p class="note" style="margin-top:0">Measures how many milliseconds apart the phones' sounds really arrive, speakers included. 1) Put the phones that will play close together. 2) On a separate phone (the meter), set the volume to 0 and tap Start listening near them. 3) The host taps Play meter signal. Use a quiet room. Echoes can look like extra phones, so set the number of playing phones correctly.</p>
+    <div class="row small"><label class="lbl" for="meterK">Phones playing</label><input type="text" id="meterK" value="2" maxlength="1" style="width:3em;letter-spacing:0"><button id="btnMeter">Start listening</button><button id="btnMeterPlay" class="alt" hidden>Play meter signal</button></div>
+    <p class="note" id="meterOut">Not listening.</p>
+  </section>
+
+  <section id="graphSec" class="card" hidden>
+    <h2>Live graph</h2>
+    <canvas id="pulse" aria-label="Live graph of the sound this phone is playing"></canvas>
+    <p class="note" id="pulseInfo">Waiting for sound...</p>
+    <p class="note">White line = loudness over the last 10 seconds. Numbers = the loudest frequency (Hz). Every phone uses the same time axis, so take screenshots together and compare. This reads the sound inside the browser, before the speaker, so it cannot show speaker delay.</p>
+  </section>
+
+  <section id="logSec" class="card" hidden><h2>Log</h2><pre id="log"></pre></section>
+
+  <p class="foot">Prototype (Phase 1, web). Tests the timing method only; not verified on real devices or Bluetooth speakers.<br>Created and developed by Joe. Original concept: Sai Krishna. Annamacharya Institute of Technology and Sciences, Rajampet (AITS) &middot; B.Tech Mechanical Engineering.</p>
+</main>
+
+<div id="paper" hidden aria-hidden="true"></div><canvas id="burnfx" hidden></canvas>
+<div id="leaveModal" hidden role="dialog" aria-modal="true"><div class="mbox"><p id="lmText"></p><div class="row" style="justify-content:center"><button id="lmNo" class="ice"><b class="lb">Stay</b><canvas id="snowCv" class="snowcv"></canvas><span class="ik"><i></i><i></i><i></i><i></i></span></button><button id="lmYes" class="hot"><canvas id="fireCv" class="firecv"></canvas><b class="lb">Leave</b></button></div></div></div>
+<div id="modal" hidden role="dialog" aria-modal="true"><div class="mbox"><p id="mtext"></p><div class="row" style="justify-content:center"><button id="mNo" class="alt">&#10060; Cancel</button><button id="mYes">&#9989; Confirm</button></div></div></div>
+
+<script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
+<script>window.Peer || document.write('<script src="https://cdn.jsdelivr.net/npm/peerjs@1.5.4/dist/peerjs.min.js"><\/script>');</script>
+<script src="synora-core.js"></script>
+<script>
+(function () {
+  'use strict';
+  const C = SynoraCore, $ = id => document.getElementById(id), now = () => performance.now();
+  const LEAD = 2000, PAUSE_LEAD = 300, MAXF = 8, GRAPH_MS = 10000;
+  let ctx = null, gain = null, analyser = null, td = null, fd = null, clickBuf = null, meterBuf = null, src = null;
+  let peer = null, role = null, roomCode = '', conns = [], hostConn = null, devN = 0, devTimer = null;
+  let offset = 0, samples = [], pingTimer = null, helloSent = false, lastPong = 0, lastRtt = null, offsetAtPlay = null;
+  let state = C.initialState(), lastSeq = 0, seq = 0, left = false;
+  let lib = [], q = { idx: 0, trackPlays: 1, trackReps: 1, listPlays: 1, listReps: 1, shuffle: false };
+  let bufs = {}, mine = {}, raw = {}, rx = {}, jew = {}, sent = {}, counter = 0, devList = [];
+  let pts = [], spikeUp = false, liveHz = null;
+  let seg = null, lastHard = 0, ratePpm = 0, trimMs = 0, errs = [], trimTimer = null;
+  try { trimMs = +localStorage.getItem('synora.trim') || 0; } catch (e) {}
+  let showRm = null, rmTimer = null, pressTimer = null, pressing = false;
+  let myCode = '', myModel = 'Phone', blocked = {}, readySet = new Set(), reconTries = 0, storedP = null, localInfo = {}, pend = {}, myProps = {}, props = [], propN = 0;
+  try { myCode = localStorage.getItem('synora.dev') || ''; if (!myCode) { myCode = C.makeRoomCode(Math.random, 4); localStorage.setItem('synora.dev', myCode); } } catch (e) { myCode = C.makeRoomCode(Math.random, 4); }
+  try { if (navigator.userAgentData && navigator.userAgentData.getHighEntropyValues) navigator.userAgentData.getHighEntropyValues(['model']).then(v => { if (v.model) myModel = v.model; }).catch(() => {}); } catch (e) {}
+  const myName = () => myModel + ' \u00B7 ' + myCode;
+
+  const log = m => { const el = $('log'); el.textContent += '[' + (now() / 1000).toFixed(1) + '] ' + m + '\n'; el.scrollTop = el.scrollHeight; };
+  const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+  const fmt = s => Math.floor(s / 60) + ':' + String(Math.floor(s % 60)).padStart(2, '0');
+  const bufFor = id => id === 'meter' ? meterBuf : id ? bufs[id] : clickBuf;
+  const durOf = id => { const b = bufFor(id); return b ? b.duration : 120; };
+  const hostNow = () => now() + offset;
+  let busyOn = false;
+  const alertMsg = t => {                    // start screen: shown under the heating rod; inside a room: a small message at the bottom
+    const onStart = !$('start').hidden;
+    $('alert').textContent = t; $('alert').hidden = !t || onStart;
+    $('rodBox').hidden = !t || !onStart; $('rodMsg').textContent = onStart ? t : '';
+    $('rodBox').classList.toggle('err', !busyOn);
+  };
+  const netType = () => { const c = navigator.connection; return c && c.type ? c.type : 'unknown'; };
+  const ICON = {
+    wifi: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#D9B86C" stroke-width="2" stroke-linecap="round" role="img" aria-label="Wi-Fi"><path d="M2 9a15 15 0 0 1 20 0"/><path d="M5.5 12.5a10 10 0 0 1 13 0"/><path d="M9 16a5 5 0 0 1 6 0"/><circle cx="12" cy="19.5" r="1.3" fill="#D9B86C"/></svg>',
+    cellular: '<svg width="22" height="22" viewBox="0 0 24 24" fill="#D9B86C" role="img" aria-label="Mobile data"><rect x="2.5" y="15" width="3.5" height="6" rx="1"/><rect x="8" y="11" width="3.5" height="10" rx="1"/><rect x="13.5" y="7" width="3.5" height="14" rx="1"/><rect x="19" y="3" width="3.5" height="18" rx="1"/></svg>',
+    unknown: '<span style="color:#D9B86C;font-weight:700" aria-label="Unknown connection">?</span>'
+  };
+  const netIcon = t => ICON[t] || ICON.unknown;
+
+  // Each bar gets its OWN element (no repeats while unused ones remain), with its own animation.
+  const g = (...c) => 'linear-gradient(90deg,' + c.join(',') + ')';
+  const SHINE = 'linear-gradient(110deg,transparent 40%,rgba(255,255,255,.6) 50%,transparent 60%)';
+  const MATERIALS = [   // [name, look, effect: s = shine sweep, p = glow pulse, sp = both, h = rainbow shift]
+    ['Platinum', g('#9EA3AB', '#F4F6F9', '#C9CED6', '#F4F6F9', '#9EA3AB'), 's'], ['Titanium', g('#6E7480', '#BFC6D0', '#8A929E', '#BFC6D0', '#6E7480'), 's'],
+    ['Bronze', g('#6B4423', '#CD7F32', '#9C5F23', '#E3A15A', '#6B4423'), 'p'], ['Brass', g('#8A6B1F', '#E6C253', '#B8942E', '#F1D87A', '#8A6B1F'), 's'],
+    ['Nickel', g('#7A8087', '#D4D8DD', '#9AA0A8', '#D4D8DD', '#7A8087'), 's'], ['Tin', g('#9AA1A8', '#E9ECEF', '#B7BDC4', '#E9ECEF', '#9AA1A8'), 's'],
+    ['Lead', g('#3B4048', '#707882', '#4A5059', '#707882', '#3B4048'), 'p'], ['Mercury', g('#AEB6C0', '#FFFFFF', '#8F98A4', '#FFFFFF', '#AEB6C0'), 's'],
+    ['Chromium', g('#8D96A3', '#FFFFFF', '#B6BEC9', '#EAF0F8', '#8D96A3'), 's'], ['Cobalt', g('#1B3A8C', '#4F7BE8', '#2A52BE', '#7FA0F2', '#1B3A8C'), 'p'],
+    ['Ruby', g('#7A0C1E', '#E0314B', '#B3122E', '#F0627A', '#7A0C1E'), 'p'], ['Sapphire', g('#0B2A6B', '#3A6FE0', '#1B49B8', '#7AA2F5', '#0B2A6B'), 'sp'],
+    ['Emerald', g('#0B5A3A', '#2FBF7A', '#138A55', '#6FE0A8', '#0B5A3A'), 'sp'], ['Amethyst', g('#4B1F7A', '#A66BE0', '#7A3FB8', '#C9A0F0', '#4B1F7A'), 'sp'],
+    ['Topaz', g('#B36A12', '#F5B642', '#D98B1E', '#FFD98A', '#B36A12'), 'sp'], ['Pearl', g('#E8E2D8', '#FFFFFF', '#F3D9E4', '#DCEBF5', '#E8E2D8'), 'h'],
+    ['Opal', g('#BFE8FF', '#F4C6E0', '#E9F5C9', '#D9C6F5', '#BFE8FF'), 'h'], ['Obsidian', g('#0A0A0F', '#3A3A48', '#15151D', '#4A4A5C', '#0A0A0F'), 's'],
+    ['Quartz', g('#F0E6F2', '#FFFFFF', '#E3D5EA', '#FFFFFF', '#F0E6F2'), 'sp'], ['Rose Gold', g('#B76E79', '#F4C2C2', '#D99A9A', '#FFD9D4', '#B76E79'), 's'],
+    ['Steel', g('#4C5560', '#A9B4C0', '#6E7986', '#A9B4C0', '#4C5560'), 's'], ['Magnesium', g('#B8BFC7', '#FFFFFF', '#D7DCE2', '#FFFFFF', '#B8BFC7'), 'p'],
+    // the first eight, used only after all the new ones are taken
+    ['Gold', g('#B8964A', '#F5DDA0', '#D9B86C', '#F5DDA0', '#B8964A'), 's'], ['Silver', g('#9AA0AA', '#F2F4F8', '#C9CED6', '#F2F4F8', '#9AA0AA'), 's'],
+    ['Copper', g('#8A4B2A', '#E0905F', '#B87333', '#E0905F', '#8A4B2A'), 'p'], ['Diamond', 'linear-gradient(120deg,#FFFFFF,#BFE8FF,#F4C6E0,#FFFFFF,#E9F5C9,#BFE8FF,#FFFFFF)', 'h'],
+    ['Glass', 'linear-gradient(180deg,rgba(220,240,250,.85),rgba(120,175,200,.55) 55%,rgba(200,230,245,.8))', 'sp'], ['Aluminium', 'repeating-linear-gradient(90deg,#B5BDC7 0 2px,#DDE2E8 2px 4px)', 's'],
+    ['Zinc', g('#6F7D8B', '#C8D2DC', '#8C9AA8', '#C8D2DC', '#6F7D8B'), 's'], ['Iron', g('#3F444C', '#8A9099', '#5A5F68', '#8A9099', '#3F444C'), 'p']
+  ];
+  const OLD = new Set(['Gold', 'Silver', 'Copper', 'Diamond', 'Glass', 'Aluminium', 'Zinc', 'Iron']);
+  let usedMat = new Set();
+  function jewel(id) {
+    if (jew[id]) return jew[id];
+    const free = MATERIALS.filter(m => !usedMat.has(m[0])), fresh = free.filter(m => !OLD.has(m[0]));
+    const pick = fresh.length ? fresh : free.length ? free : (usedMat = new Set(), MATERIALS);
+    const m = pick[Math.floor(Math.random() * pick.length)]; usedMat.add(m[0]); return (jew[id] = m);
+  }
+  const barHtml = (id, pct) => {
+    const m = jewel(id);   // percentage in the middle; the element name sits small at the end of the fill (hidden mid-way so they never overlap)
+    const nm = pct >= 70 ? '<u style="right:' + (101 - pct) + '%">' + m[0] + '</u>' : pct <= 30 ? '<u style="left:' + (pct + 1) + '%">' + m[0] + '</u>' : '';
+    return '<div class="bar"><i class="fx fx-' + m[2] + '" style="background-image:' + SHINE + ',' + m[1] + ';background-size:220% 100%,100% 100%;background-repeat:no-repeat,repeat;clip-path:inset(0 ' + (100 - pct) + '% 0 0)"></i>' + nm + '<b>' + pct + '%</b></div>';
+  };
+
+  // ---- Audio -----------------------------------------------------------
+  async function ensureAudio() {
+    if (!ctx) {
+      ctx = new (window.AudioContext || window.webkitAudioContext)({ latencyHint: 'interactive' });
+      gain = ctx.createGain(); gain.gain.value = $('vol').value / 100; gain.connect(ctx.destination);
+      analyser = ctx.createAnalyser(); analyser.fftSize = 1024; analyser.connect(gain);
+      td = new Float32Array(1024); fd = new Float32Array(512);
+      const d = C.clickTrack(ctx.sampleRate, 120); clickBuf = ctx.createBuffer(1, d.length, ctx.sampleRate); clickBuf.copyToChannel(d, 0);
+      const mt = C.measureTrack(ctx.sampleRate, 120); meterBuf = ctx.createBuffer(1, mt.length, ctx.sampleRate); meterBuf.copyToChannel(mt, 0);
+    }
+    if (ctx.state !== 'running') ctx.resume().catch(() => {});
+    try { if (navigator.wakeLock) navigator.wakeLock.request('screen').catch(() => {}); } catch (e) {}
+  }
+  function perfToCtx(ms) {
+    if (ctx.getOutputTimestamp) { const ts = ctx.getOutputTimestamp(); if (ts.performanceTime > 0) return ts.contextTime + (ms - ts.performanceTime) / 1000; }
+    return ctx.currentTime + (ms - now()) / 1000;
+  }
+  function stopSource(at) { if (!src) return; try { src.stop(at || 0); } catch (e) {} if (!at) src = null; }
+  function startSource(startHost, pos) {
+    stopSource();
+    const b = bufFor(state.track);
+    if (!b) { log('song not ready on this device yet'); return; }
+    const plan = C.planStart({ startHost: startHost, pos: pos }, offset, now());
+    const when = Math.max(perfToCtx(now() + plan.waitMs), ctx.currentTime), p = Math.max(0, Math.min(plan.pos + trimMs / 1000, b.duration - 0.01));
+    src = ctx.createBufferSource(); src.buffer = b; src.connect(analyser); src.start(when, p);
+    seg = { ctx0: when, pos0: p, rate: 1 }; errs = []; offsetAtPlay = offset;
+    log('play ' + (plan.late ? 'LATE by ' + plan.lateMs.toFixed(0) + ' ms, ' : '') + 'from ' + p.toFixed(1) + ' s');
+  }
+
+  // ---- Commands ----------------------------------------------------------
+  function handle(cmd) {
+    const a = C.acceptCommand(lastSeq, cmd.seq);
+    if (!a.accept) return; lastSeq = a.lastSeq;
+    const trk = cmd.type === 'play' && cmd.track !== undefined ? cmd.track : state.track;
+    state = C.reduce(state, cmd, durOf(trk));
+    if (cmd.type === 'play' || (cmd.type === 'seek' && state.status === 'playing')) startSource(state.startHost, state.startPos);
+    else if (cmd.type === 'pause') stopSource(Math.max(perfToCtx(C.hostToLocal(cmd.atHost, offset)), ctx.currentTime));
+    else if (cmd.type === 'stop') stopSource();
+    renderLib();
+  }
+  function send(cmd) { cmd.seq = ++seq; conns.forEach(c => c.open && c.send(cmd)); handle(cmd); }
+  function pushMeta() { const m = { type: 'meta', lib: lib, q: q }; conns.forEach(c => c.open && c.send(m)); if (role === 'host') saveMeta(); renderLib(); renderCtl(); }
+
+  // ---- Host playback actions ---------------------------------------------
+  const curId = () => lib[q.idx] ? lib[q.idx].id : null;
+  function allReady() {
+    return lib.every(it => mine[it.id] === 100) && conns.filter(c => c.open).every(c => devProgress(c.info.prog) === 100);
+  }
+  const fileReady = id => mine[id] === 100 && conns.filter(c => c.open).every(c => (c.info.prog[id] || 0) === 100);
+  const isReady = id => role === 'host' ? fileReady(id) : readySet.has(id);
+  function devProgress(prog) { return lib.length ? Math.round(lib.reduce((n, it) => n + (prog[it.id] || 0), 0) / lib.length) : 100; }
+  function playIdx(i, pos) {
+    if (!lib.length) { send({ type: 'play', startHost: now() + LEAD, pos: 0, track: null }); return; }
+    q = Object.assign({}, q, { idx: i, trackPlays: 1, listPlays: 1 }); pushMeta();
+    send({ type: 'play', startHost: now() + LEAD, pos: pos || 0, track: lib[i].id });
+  }
+  function togglePlay() {
+    if (state.status === 'playing') send({ type: 'pause', atHost: now() + PAUSE_LEAD });
+    else if (state.status === 'paused') send({ type: 'play', startHost: now() + LEAD, pos: state.pos, track: state.track });
+    else playIdx(Math.min(q.idx, Math.max(lib.length - 1, 0)), 0);
+  }
+  function skipTrack(d) { if (!lib.length) return; const i = C.skip(Object.assign({ n: lib.length }, q), d).idx; if (isReady(lib[i].id)) playIdx(i, 0); else log('That song is still loading on some devices'); }
+  function autoAdvance() {
+    const dur = durOf(state.track);
+    if (C.positionAt(state, now(), dur) < dur - 0.05) return;
+    if (state.track === 'meter') { send({ type: 'stop' }); return; }
+    const nx = C.advance(Object.assign({ n: lib.length }, q), Math.random);
+    if (!nx) { send({ type: 'stop' }); return; }
+    q = Object.assign({}, q, { idx: nx.idx, trackPlays: nx.trackPlays, listPlays: nx.listPlays }); pushMeta();
+    send({ type: 'play', startHost: now() + LEAD, pos: 0, track: lib.length ? lib[nx.idx].id : null });
+  }
+
+  // ---- Keep this phone locked to the host's timeline ------------------------
+  // Compares where the audio really is with where the timeline says it should be.
+  // Small error: nudge playbackRate (max +/-0.3%). Large error: restart at the right spot.
+  function control() {
+    if (!src || !seg || !ctx || state.status !== 'playing') return;
+    const nowP = now(), cNow = perfToCtx(nowP);
+    if (cNow < seg.ctx0 + 0.5) return;
+    const actual = seg.pos0 + (cNow - seg.ctx0) * seg.rate;
+    const e = C.positionAt(state, hostNow(), durOf(state.track)) + trimMs / 1000 - actual;
+    if (Math.abs(e) > 0.12) { if (nowP - lastHard > 5000) { lastHard = nowP; log('resync: was ' + (e * 1000).toFixed(0) + ' ms off'); startSource(state.startHost, state.startPos); } return; }
+    const r = Math.abs(e) < 0.001 ? 1 : 1 + Math.max(-0.003, Math.min(0.003, e * 0.2));
+    seg = { ctx0: cNow, pos0: actual, rate: r }; src.playbackRate.value = r; ratePpm = (r - 1) * 1e6;
+  }
+  function setTrim(v) {
+    trimMs = Math.round(v * 10) / 10; $('trim').textContent = trimMs.toFixed(1) + ' ms';
+    try { localStorage.setItem('synora.trim', trimMs); } catch (e) {}
+    clearTimeout(trimTimer); if (state.status === 'playing' && src) trimTimer = setTimeout(() => startSource(state.startHost, state.startPos), 400);
+  }
+
+  // ---- Remove a song (host: press and hold, then tap the red cross) ---------------
+  function removeSong(i) {
+    const it = lib[i]; if (!it) return;
+    const cid = curId();
+    if (state.status !== 'idle' && state.track === it.id) send({ type: 'stop' });
+    lib.splice(i, 1);
+    delete bufs[it.id]; delete raw[it.id]; delete mine[it.id];
+    conns.forEach(c => { delete c.info.prog[it.id]; });
+    idbDel([roomCode + ':' + it.id]).catch(() => {});
+    q = Object.assign({}, q, { idx: Math.min(Math.max(0, lib.findIndex(x => x.id === cid)), Math.max(lib.length - 1, 0)) });
+    showRm = null; pushMeta(); broadcastDevs(); log('removed ' + it.name);
+  }
+  {
+    const lp = $('libList');
+    lp.addEventListener('pointerdown', e => {
+      if (role !== 'host' || e.target.closest('button')) return;
+      const li = e.target.closest('li[data-id]'); if (!li) return;
+      pressing = true; clearTimeout(pressTimer);
+      pressTimer = setTimeout(() => {
+        pressing = false; showRm = li.dataset.id; renderLib(); if (navigator.vibrate) navigator.vibrate(30);
+        clearTimeout(rmTimer); rmTimer = setTimeout(() => { showRm = null; renderLib(); }, 5000);
+      }, 550);
+    });
+    ['pointerup', 'pointercancel', 'pointerleave'].forEach(ev => lp.addEventListener(ev, () => { clearTimeout(pressTimer); pressing = false; }));
+    lp.addEventListener('contextmenu', e => e.preventDefault());
+  }
+
+  // ---- Songs suggested by other devices (host approves) -----------------------
+  async function suggestFiles(files) {
+    for (const f of files) {
+      if (role !== 'receiver' || !hostConn || !hostConn.open) { log('Not connected to the host'); return; }
+      const pid = myCode + '-' + (++propN);
+      try {
+        const ab = await f.arrayBuffer(), bytes = ab.slice(0), buf = await ctx.decodeAudioData(ab);
+        myProps[pid] = { name: f.name, size: f.size, buf: buf, bytes: bytes };
+      } catch (e) { log('could not read ' + f.name + ' on this phone'); continue; }
+      const CH = 32768, total = Math.ceil(f.size / CH);
+      hostConn.send({ type: 'prop-start', pid: pid, name: f.name, size: f.size, total: total });
+      for (let i = 0; i < total; i++) {
+        while (myProps[pid] && hostConn && hostConn.dataChannel && hostConn.dataChannel.bufferedAmount > 1048576) await new Promise(r => setTimeout(r, 25));
+        if (!myProps[pid] || !hostConn || !hostConn.open) break;
+        hostConn.send({ type: 'prop-chunk', pid: pid, i: i, data: myProps[pid].bytes.slice(i * CH, (i + 1) * CH) });
+      }
+      if (myProps[pid] && hostConn && hostConn.open) hostConn.send({ type: 'prop-end', pid: pid });
+    }
+  }
+  function renderProps() {
+    const host = role === 'host';
+    $('propList').innerHTML = props.length ? props.map(p => {
+      const own = p.code === myCode;
+      return '<li><div><b>' + esc(p.dev) + '</b></div><div class="nm" style="white-space:normal">' + esc(p.name) + '</div><div class="ds">' + (p.done ? 'Uploaded \u2713' : 'Not uploaded yet') + '</div>' + barHtml('p' + p.pid, p.pct) +
+        (host || own ? '<div class="dact">' + (host ? '<button data-a="add" data-p="' + esc(p.pid) + '"' + (p.done ? '' : ' disabled') + '>Add</button>' : '') + '<button class="alt" data-a="no" data-p="' + esc(p.pid) + '">Cancel</button></div>' : '') + '</li>';
+    }).join('') : '<li class="empty">No songs waiting.</li>';
+  }
+  function pendBytes(p) { const all = new Uint8Array(p.parts.reduce((n, x) => n + x.byteLength, 0)); let o = 0; p.parts.forEach(x => { all.set(x, o); o += x.byteLength; }); return all.buffer; }
+  function reject(pid, why) {
+    const p = pend[pid]; if (!p) return;
+    const pc = conns.find(c => c.info.code === p.code); if (pc && pc.open) pc.send({ type: 'prop-no', pid: pid, why: why });
+    delete pend[pid]; broadcastDevs();
+  }
+  async function approve(pid) {
+    const p = pend[pid]; if (!p || !p.done) return;
+    if (lib.length >= MAXF) { flash('The room already has ' + MAXF + ' songs.'); return; }
+    const bytes = pendBytes(p), copy = bytes.slice(0), id = 's' + (++counter);
+    try { bufs[id] = await ctx.decodeAudioData(bytes); } catch (e) { counter--; reject(pid, 'The host phone could not play that file.'); return; }
+    raw[id] = copy; mine[id] = 100; lib.push({ id: id, name: p.name, size: copy.byteLength }); saveFile(roomCode, id, p.name, copy.byteLength, copy);
+    const pc = conns.find(c => c.info.code === p.code);
+    if (pc && pc.open) { pc.info.prog[id] = 100; pc.send({ type: 'prop-ok', pid: pid, id: id }); }
+    delete pend[pid]; pushMeta();
+    conns.forEach(c => { if (c.open && c !== pc) sendFile(c, id); });
+    broadcastDevs();
+  }
+
+  // ---- Sync meter: listen with the microphone and measure arrival gaps ------------
+  let mic = null, micBuf = [], micLen = 0, meterRes = [];
+  async function startMeter() {
+    try {
+      const st = await navigator.mediaDevices.getUserMedia({ audio: { echoCancellation: false, noiseSuppression: false, autoGainControl: false } });
+      const node = ctx.createMediaStreamSource(st), sp = ctx.createScriptProcessor(4096, 1, 1), mute = ctx.createGain(); mute.gain.value = 0;
+      sp.onaudioprocess = e => {
+        const d = new Float32Array(e.inputBuffer.getChannelData(0)); micBuf.push(d); micLen += d.length;
+        while (micBuf.length > 1 && micLen - micBuf[0].length > ctx.sampleRate * 2.6) micLen -= micBuf.shift().length;
+      };
+      node.connect(sp); sp.connect(mute); mute.connect(ctx.destination);
+      mic = { st: st, node: node, sp: sp, timer: setInterval(analyseMeter, 2000) }; meterRes = [];
+      $('btnMeter').textContent = 'Stop listening'; $('meterOut').textContent = 'Listening... host: tap Play meter signal.';
+    } catch (e) { $('meterOut').textContent = 'Microphone not available: ' + (e.message || e.name); }
+  }
+  function stopMeter() {
+    if (!mic) return;
+    clearInterval(mic.timer); try { mic.sp.disconnect(); mic.node.disconnect(); } catch (e) {}
+    mic.st.getTracks().forEach(t => t.stop()); mic = null; micBuf = []; micLen = 0;
+    $('btnMeter').textContent = 'Start listening'; $('meterOut').textContent = 'Not listening.';
+  }
+  function analyseMeter() {
+    if (micLen < ctx.sampleRate * 2) return;
+    const sig = new Float32Array(micLen); let o = 0; micBuf.forEach(b => { sig.set(b, o); o += b.length; });
+    const K = Math.max(1, Math.min(6, parseInt($('meterK').value, 10) || 2)), sr = ctx.sampleRate;
+    const ev = C.groupEvents(C.findArrivals(sig, C.chirp(sr), sr, 1, 0.25), 300).filter(e => e.length >= K);
+    if (!ev.length) { $('meterOut').textContent = 'Listening... no clear signal yet. Move closer, raise the playing phones\' volume, or check the number of phones.'; return; }
+    const offs = C.offsetsOf(ev[ev.length - 1], K), spread = offs[offs.length - 1];
+    meterRes.push(spread); if (meterRes.length > 9) meterRes.shift();
+    $('meterOut').textContent = 'Last signal, ms after the first phone: ' + offs.map(x => x.toFixed(1)).join(', ') + '. Gap between first and last phone: median ' + C.median(meterRes).toFixed(1) + ' ms (lowest ' + Math.min.apply(null, meterRes).toFixed(1) + ', highest ' + Math.max.apply(null, meterRes).toFixed(1) + ', over ' + meterRes.length + ' readings; readings overlap).';
+  }
+  $('btnMeter').onclick = () => { if (mic) stopMeter(); else startMeter(); };
+  $('btnMeterPlay').onclick = () => { if (role !== 'host') return; if (state.status === 'playing' && state.track === 'meter') send({ type: 'stop' }); else send({ type: 'play', startHost: now() + LEAD, pos: 0, track: 'meter' }); };
+
+  // ---- Host handover: one main host, the old host becomes a member -----------
+  let hoPending = null, askRes = null;
+  const ask = text => new Promise(res => { $('mtext').textContent = text; $('modal').hidden = false; askRes = res; });
+  function answer(v) { $('modal').hidden = true; if (askRes) { const r = askRes; askRes = null; r(v); } }
+  function flash(t, ms) { alertMsg(t); setTimeout(() => { if ($('alert').textContent === t) alertMsg(''); }, ms || 5000); }
+  async function startHandover(c) {
+    if (hoPending) return;
+    if (!await ask('Give the host role to ' + c.info.name + '? Playback will pause and you will become a member.')) return;
+    hoPending = { conn: c, timer: setTimeout(() => { if (hoPending) { try { c.send({ type: 'ho-cancel' }); } catch (e) {} hoPending = null; flash('No answer from ' + c.info.name + '. Handover cancelled.'); } }, 30000) };
+    alertMsg('Waiting for ' + c.info.name + ' to accept...');
+    c.send({ type: 'ho-offer', name: myName() });
+  }
+  function finishHandover(c) {
+    alertMsg('Handing over to ' + c.info.name + '...');
+    const wasPlaying = state.status === 'playing';
+    if (wasPlaying) send({ type: 'pause', atHost: now() + PAUSE_LEAD });
+    setTimeout(() => {
+      c.send({ type: 'ho-data', snap: { code: roomCode, counter: counter, lib: lib, q: q, state: state, seq: seq, blocked: blocked } });
+      conns.forEach(o => { if (o !== c && o.open) o.send({ type: 'ho-notice', name: c.info.name }); });
+      setTimeout(stepDown, 700);
+    }, wasPlaying ? 500 : 0);
+  }
+  function stepDown() {                      // old host: close the room's host connection and join as a member
+    clearInterval(devTimer); hoPending = null;
+    const cs = conns.slice(), pr = peer, code = roomCode;
+    conns = []; peer = null; role = null; left = false;
+    cs.forEach(c => { try { c.close(); } catch (e) {} }); try { pr.destroy(); } catch (e) {}
+    lastSeq = 0; seq = 0; samples = []; offset = 0; helloSent = false; reconTries = 0;
+    alertMsg('You are now a member. Connecting to the new host...');
+    setTimeout(() => startJoin(code), 1000);
+  }
+  async function becomeHost(snap) {          // chosen device: take over the room code, songs and queue
+    left = true; clearTimeout(pingTimer); stopSource();
+    const hc = hostConn, pr = peer; hostConn = null; peer = null;
+    try { hc.close(); } catch (e) {} try { pr.destroy(); } catch (e) {}
+    counter = snap.counter; q = snap.q; state = snap.state; seq = snap.seq; lastSeq = snap.seq; blocked = snap.blocked || {};
+    try { const recs = await idbAll(); snap.lib.forEach(it => { const r = recs.find(x => x.room === snap.code && x.id === it.id); if (r) raw[it.id] = r.bytes; }); } catch (e) {}
+    lib = snap.lib.filter(it => raw[it.id] && bufs[it.id]);
+    role = null; offset = 0; samples = []; helloSent = false;
+    alertMsg('You are becoming the host...'); startHost(0, snap.code);
+  }
+
+  // ---- Fast start: show progress at once, and keep a connection warm --------------
+  let busyTimer = null, warm = null;
+  const CONNECT_TIMEOUT = 15000;
+  let connTimer = null;
+  function busy(on, text) {
+    ['btnHost', 'btnJoin', 'btnRehost', 'btnResume'].forEach(id => { $(id).disabled = on; });
+    $('cancelRow').hidden = !on; busyOn = on;
+    clearTimeout(busyTimer);
+    if (on) {
+      alertMsg(text || 'Connecting...');
+      busyTimer = setTimeout(() => {        // after 8 s, check the free connection server to say WHY it is slow
+        probeServer().then(r => {
+          const t = $('alert').textContent.replace(/ (Taking longer|The connection server).*$/, '');
+          if (!busyOn || !t || $('start').hidden) return;
+          alertMsg(t + ' ' + (r.ok ? 'The connection server answered in ' + r.ms + ' ms, so it is reachable but slow.' : 'The connection server cannot be reached from this network.'));
+        });
+      }, 8000);
+    }
+  }
+  function failConnect(msg) {                // stop connecting, free the buttons, say what happened
+    clearTimeout(connTimer);
+    if (role === null) { const pr = peer; peer = null; if (pr) { try { pr.destroy(); } catch (x) {} } }
+    left = false; reconTries = 0; busy(false); alertMsg(msg); setTimeout(warmUp, 1000);
+  }
+  function probeServer() {
+    return new Promise(res => {
+      const t0 = performance.now(), ac = typeof AbortController !== 'undefined' ? new AbortController() : null;
+      const to = setTimeout(() => { try { if (ac) ac.abort(); } catch (e) {} res({ ok: false, ms: 0 }); }, 6000);
+      try { fetch('https://0.peerjs.com/', { mode: 'no-cors', cache: 'no-store', signal: ac ? ac.signal : undefined }).then(() => { clearTimeout(to); res({ ok: true, ms: Math.round(performance.now() - t0) }); }).catch(() => { clearTimeout(to); res({ ok: false, ms: 0 }); }); }
+      catch (e) { clearTimeout(to); res({ ok: false, ms: 0 }); }
+    });
+  }
+  const setBusyText = t => { if (!$('start').hidden) alertMsg(t); };
+  const friendly = type => (['network', 'server-error', 'socket-error', 'socket-closed'].indexOf(type) >= 0) ? 'Could not reach the connection server. Check the internet and try again.' : type === 'browser-incompatible' ? 'This browser cannot make the connection.' : 'Connection problem (' + type + ').';
+  function warmUp() {                        // connect to the server while the page is idle, so Host / Join is instant
+    if (typeof Peer === 'undefined' || warm) return;
+    const code = C.makeRoomCode(Math.random, 4), pr = new Peer('synora-' + code), w = { code: code, peer: pr };
+    warm = w;
+    pr.on('error', e => { if (warm === w) { warm = null; try { pr.destroy(); } catch (x) {} if (e.type === 'unavailable-id') setTimeout(warmUp, 500); } });
+  }
+  function takeWarm() {
+    const w = warm; warm = null;
+    if (w && !w.peer.destroyed && !w.peer.disconnected) return w;
+    if (w) { try { w.peer.destroy(); } catch (x) {} }
+    return null;
+  }
+
+  // ---- Remember rooms, devices and songs (survives a refresh) ----------------
+  function idbOpen() { return new Promise((res, rej) => { const r = indexedDB.open('synora', 1); r.onupgradeneeded = () => r.result.createObjectStore('files', { keyPath: 'k' }); r.onsuccess = () => res(r.result); r.onerror = () => rej(r.error); }); }
+  async function idbAll() { const db = await idbOpen(); return new Promise((res, rej) => { const g = db.transaction('files').objectStore('files').getAll(); g.onsuccess = () => res(g.result); g.onerror = () => rej(g.error); }); }
+  async function idbPut(rec) { const db = await idbOpen(); return new Promise((res, rej) => { const t = db.transaction('files', 'readwrite'); t.objectStore('files').put(rec); t.oncomplete = res; t.onerror = () => rej(t.error); }); }
+  async function idbDel(keys) { if (!keys.length) return; const db = await idbOpen(); return new Promise((res, rej) => { const t = db.transaction('files', 'readwrite'); keys.forEach(k => t.objectStore('files').delete(k)); t.oncomplete = res; t.onerror = () => rej(t.error); }); }
+  const saveFile = (room, id, name, size, bytes) => idbPut({ k: room + ':' + id, room: room, id: id, name: name, size: size, bytes: bytes, ts: Date.now() }).catch(() => log('could not save a song on this phone'));
+  function saveLast() { try { localStorage.setItem('synora.last', JSON.stringify({ role: role, code: roomCode, t: Date.now() })); localStorage.setItem('synora.act.' + roomCode, String(Date.now())); } catch (e) {} }
+  function saveMeta() { try { localStorage.setItem('synora.room.' + roomCode, JSON.stringify({ role: 'host', counter: counter, lib: lib, q: q })); localStorage.setItem('synora.act.' + roomCode, String(Date.now())); } catch (e) {} }
+  function lastRoom() { try { const l = JSON.parse(localStorage.getItem('synora.last') || 'null'); return l && l.code && Date.now() - l.t < 3600e3 ? l : null; } catch (e) { return null; } }
+  async function restoreHost(code) {         // host re-join: the room opens at once, songs are decoded in the background
+    let meta = null; try { meta = JSON.parse(localStorage.getItem('synora.room.' + code) || 'null'); } catch (e) {}
+    if (!meta) return;
+    counter = meta.counter || 0; q = meta.q || q;
+    let recs = []; try { recs = await idbAll(); } catch (e) {}
+    const keep = [], todo = [];
+    for (const it of meta.lib || []) {
+      const r = recs.find(x => x.room === code && x.id === it.id && x.name === it.name); if (!r) continue;
+      raw[it.id] = r.bytes; mine[it.id] = 20; keep.push(it); todo.push(r);
+    }
+    lib = keep; q = Object.assign({}, q, { idx: Math.min(q.idx, Math.max(lib.length - 1, 0)) });
+    setTimeout(async () => {
+      for (const r of todo) {
+        try { bufs[r.id] = await ctx.decodeAudioData(r.bytes.slice(0)); mine[r.id] = 100; }
+        catch (e) { lib = lib.filter(x => x.id !== r.id); delete mine[r.id]; delete raw[r.id]; }
+        renderLib();
+      }
+      if (role === 'host') { pushMeta(); broadcastDevs(); }
+    }, 0);
+  }
+  let storedRecs = [];
+  async function loadStored(code) {          // receiver: songs already saved on this phone for this room (names only, fast)
+    const have = {}; storedRecs = [];
+    try {
+      for (const r of (await idbAll()).filter(x => x.room === code)) { have[r.id] = r.name + '|' + r.size; localInfo[r.id] = have[r.id]; storedRecs.push(r); }
+    } catch (e) {}
+    return have;
+  }
+  async function decodeStored() {            // receiver: decode saved songs the host still has, then tell the host they are ready
+    for (const r of storedRecs.slice()) {
+      if (!lib.some(it => it.id === r.id && localInfo[r.id] === it.name + '|' + it.size)) continue;
+      if (!bufs[r.id]) { try { bufs[r.id] = await ctx.decodeAudioData(r.bytes.slice(0)); } catch (e) { continue; } }
+      mine[r.id] = 100;
+      if (hostConn && hostConn.open) hostConn.send({ type: 'prog', id: r.id, pct: 100 });
+      if (state.status === 'playing' && state.track === r.id) startSource(state.startHost, state.startPos);
+      renderLib();
+    }
+  }
+  function pruneLocal() {                    // receiver: drop songs the host no longer has
+    const ok = id => lib.some(it => it.id === id && localInfo[id] === it.name + '|' + it.size);
+    const gone = Object.keys(bufs).filter(id => !ok(id));
+    gone.forEach(id => { delete bufs[id]; delete mine[id]; delete localInfo[id]; });
+    const stale = storedRecs.filter(r => !ok(r.id)).map(r => r.id); storedRecs = storedRecs.filter(r => stale.indexOf(r.id) < 0);
+    idbDel(gone.concat(stale).map(id => roomCode + ':' + id)).catch(() => {});
+  }
+  // Rooms nobody has touched for 1 hour are forgotten: saved songs, room memory, resume button.
+  function touchRoom() { if (roomCode && role) saveLast(); }
+  async function cleanOld() {
+    const cut = Date.now() - 3600e3, act = {};
+    try { for (let i = 0; i < localStorage.length; i++) { const k = localStorage.key(i); if (k && k.indexOf('synora.act.') === 0) act[k.slice(11)] = +localStorage.getItem(k) || 0; } } catch (e) {}
+    try {
+      const recs = await idbAll(), dead = new Set();
+      recs.forEach(r => { if ((act[r.room] || r.ts) < cut && r.room !== roomCode) dead.add(r.room); });
+      await idbDel(recs.filter(r => dead.has(r.room)).map(r => r.k));
+    } catch (e) {}
+    Object.keys(act).forEach(c => { if (act[c] < cut && c !== roomCode) { try { localStorage.removeItem('synora.act.' + c); localStorage.removeItem('synora.room.' + c); } catch (e) {} } });
+    try { const l = JSON.parse(localStorage.getItem('synora.last') || 'null'); if (l && Date.now() - l.t >= 3600e3 && l.code !== roomCode) localStorage.removeItem('synora.last'); } catch (e) {}
+    if (!roomCode) { const l = lastRoom(); $('resume').hidden = !l; }
+  }
+
+  // ---- Songs: add, send, receive -----------------------------------------
+  async function addFiles(files) {
+    for (const f of files) {
+      if (lib.length >= MAXF) { log('Limit is ' + MAXF + ' songs'); break; }
+      const id = 's' + (++counter); lib.push({ id: id, name: f.name, size: f.size }); mine[id] = 5; renderLib();
+      try {
+        const ab = await f.arrayBuffer(), copy = ab.slice(0); mine[id] = 50; renderLib();
+        bufs[id] = await ctx.decodeAudioData(ab); raw[id] = copy; mine[id] = 100; saveFile(roomCode, id, f.name, f.size, copy);
+      } catch (e) { lib = lib.filter(x => x.id !== id); delete mine[id]; log('could not decode ' + f.name); renderLib(); continue; }
+      pushMeta(); conns.forEach(c => { if (c.open) sendFile(c, id); });
+    }
+  }
+  async function sendFile(conn, id) {
+    const bytes = raw[id]; if (!bytes) return;
+    const CH = 32768, total = Math.ceil(bytes.byteLength / CH), it = lib.find(x => x.id === id);
+    conn.send({ type: 'file-start', id: id, name: it ? it.name : id, total: total });
+    for (let i = 0; i < total; i++) {
+      if (!conn.open || !raw[id]) return;
+      while (conn.dataChannel && conn.dataChannel.bufferedAmount > 1048576) await new Promise(r => setTimeout(r, 25));
+      conn.send({ type: 'file-chunk', id: id, i: i, data: bytes.slice(i * CH, (i + 1) * CH) });
+    }
+    conn.send({ type: 'file-end', id: id });
+  }
+  async function finishFile(id) {
+    const r = rx[id]; delete rx[id];
+    if (!lib.some(x => x.id === id)) { delete mine[id]; return; }
+    const all = new Uint8Array(r.parts.reduce((n, p) => n + p.byteLength, 0)); let o = 0;
+    r.parts.forEach(p => { all.set(p, o); o += p.byteLength; });
+    try {
+      const copy = all.buffer.slice(0), size = all.byteLength; bufs[id] = await ctx.decodeAudioData(all.buffer); mine[id] = 100; sent[id] = 100; localInfo[id] = r.name + '|' + size; saveFile(roomCode, id, r.name, size, copy);
+      if (hostConn && hostConn.open) hostConn.send({ type: 'prog', id: id, pct: 100 });
+      if (state.status === 'playing' && state.track === id) startSource(state.startHost, state.startPos);
+    } catch (e) { log('could not decode ' + r.name + ' on this device'); }
+    renderLib();
+  }
+
+  // ---- Clock sync (receiver) ---------------------------------------------
+  function schedulePing() {
+    if (!hostConn || !hostConn.open) return;
+    hostConn.send({ type: 'ping', t0: now(), net: netType(), rtt: lastRtt });
+    pingTimer = setTimeout(schedulePing, samples.length < 15 ? 300 : 1000);
+  }
+  function onPong(m) {
+    lastPong = now(); samples.push(C.clockSample(m.t0, m.t1, m.t2, now()));
+    if (samples.length > 150) samples.shift();
+    const est = C.predictOffset(samples, now(), 3); if (!est) return;
+    offset = est.offset; lastRtt = est.rtt;
+    $('offset').textContent = est.offset.toFixed(1) + ' ms'; $('rtt').textContent = est.rtt.toFixed(1) + ' ms'; $('spread').textContent = est.spread.toFixed(1) + ' ms'; $('ppm').textContent = est.slopePpm == null ? 'measuring' : est.slopePpm.toFixed(0) + ' ppm';
+    const h = C.syncHealth(est.spread, est.rtt); $('health').textContent = h; $('health').className = h;
+    if (!helloSent && samples.length >= 3) { helloSent = true; (storedP || Promise.resolve({})).then(h => { if (hostConn && hostConn.open) hostConn.send({ type: 'hello', have: h }); }); }
+  }
+
+  // ---- Rendering ---------------------------------------------------------
+  function renderLib() {
+    if (pressing) return;
+    const host = role === 'host';
+    $('libList').innerHTML = lib.length ? lib.map((it, i) => {
+      const p = mine[it.id] || 0;
+      return '<li data-id="' + it.id + '" class="' + (state.status !== 'idle' && it.id === state.track ? 'cur' : '') + '"><div class="trk">' +
+        (host ? '<button class="ic" data-a="play" data-i="' + i + '"' + (isReady(it.id) ? '' : ' disabled') + ' aria-label="Play this song">&#9654;</button>' : '<span class="dia">&#9670;</span>') +
+        '<span class="nm">' + esc(it.name) + '</span>' + (p === 100 ? '<span class="tick" aria-label="ready">&#10003;</span>' : '') + '</div>' +
+        (host ? '<div class="mv">' + (showRm === it.id ? '<button class="ic rm" data-a="rm" data-i="' + i + '" aria-label="Remove this song">&#10060;</button>' : '') + '<button class="ic" data-a="up" data-i="' + i + '" aria-label="Move up">&#11014;</button><button class="ic" data-a="dn" data-i="' + i + '" aria-label="Move down">&#11015;</button></div>' : '<span></span>') +
+        '<div style="grid-column:1/3">' + barHtml(it.id, p) + '</div></li>';
+    }).join('') : '<li class="empty">No songs yet.</li>';
+    $('libCount').textContent = lib.length + ' / ' + MAXF;
+  }
+  function renderDevs() {
+    const host = role === 'host';
+    $('devList').innerHTML = devList.map(d => '<li><span>' + netIcon(d.net) + '</span><span>' + esc(d.name) + '</span><span class="ds">' + esc(d.str) + '</span>' + barHtml('d' + d.code, d.pct) +
+      (host && d.code !== 'host' ? '<div class="dact">' + (d.pct === 100 ? '<button class="alt" data-a="mk" data-c="' + esc(d.code) + '">Make host</button>' : '') + '<button class="alt" data-a="rm" data-c="' + esc(d.code) + '">Remove</button><button class="alt" data-a="bl" data-c="' + esc(d.code) + '">Block 5 min</button></div>' : '') + '</li>').join('');
+    $('peers').textContent = Math.max(0, devList.length - 1);
+  }
+  function renderCtl() {
+    const host = role === 'host', target = state.track || curId(), ok = !lib.length || (target ? isReady(target) : readySet.size > 0);
+    $('ready').textContent = !lib.length ? 'Built-in click track. Add songs below.' : ok ? '\u2713 Ready To Play (' + readySet.size + ' of ' + lib.length + ' songs ready on all devices)' : 'Loading this song on all devices...';
+    $('ready').className = 'badge' + (ok ? ' ok' : '');
+    $('btnPlay').disabled = !host || !ok; $('btnPrev').disabled = $('btnNext').disabled = !host || !lib.length;
+    ['btnShuf', 'btnRepEach', 'btnRepAll', 'seek'].forEach(id => { $(id).disabled = !host; });
+    $('btnPlay').innerHTML = state.status === 'playing' ? '&#10074;&#10074;' : '&#9654;';
+    $('btnShuf').className = 'alt' + (q.shuffle ? ' on' : '');
+    $('btnRepEach').textContent = 'Each x' + q.trackReps; $('btnRepAll').textContent = 'All x' + q.listReps;
+  }
+  function broadcastDevs() {
+    devList = [{ name: 'Host \u00B7 ' + myName(), code: 'host', net: netType(), str: '', pct: devProgress(mine) }].concat(conns.filter(c => c.open).map(c => ({
+      name: c.info.name, code: c.info.code, net: c.info.net, str: C.strengthLabel(c.info.rtt, now() - c.info.seen > 6000), pct: devProgress(c.info.prog) })));
+    const ids = lib.filter(it => fileReady(it.id)).map(it => it.id); readySet = new Set(ids);
+    props = Object.keys(pend).map(k => { const p = pend[k]; return { pid: p.pid, code: p.code, dev: p.dev, name: p.name, done: p.done, pct: p.done ? 100 : Math.floor(p.got / Math.max(p.total, 1) * 100) }; });
+    conns.forEach(c => c.open && c.send({ type: 'devs', list: devList, ready: ids, props: props }));
+    renderDevs(); renderProps(); renderLib(); renderCtl();
+  }
+  function showRoom() {
+    ['room', 'player', 'devs', 'props', 'lib', 'tune', 'meter', 'graphSec', 'logSec', 'backRow'].forEach(id => { $(id).hidden = false; });
+    $('start').hidden = true; $('sync').hidden = role !== 'receiver';
+    $('role').textContent = role === 'host' ? 'Host' : 'Receiver'; $('roomCode').textContent = roomCode;
+    $('linkRow').hidden = role !== 'host'; $('btnMeterPlay').hidden = role !== 'host'; $('addRow').hidden = false;
+    $('link').textContent = location.origin + location.pathname + '?join=' + roomCode;
+    renderLib(); renderCtl(); renderDevs();
+  }
+
+  // ---- Networking --------------------------------------------------------
+  function startHost(tries, fixed) {
+    if (typeof Peer === 'undefined') { failConnect('The connection library did not load. Check the internet and refresh this page.'); return; }
+    if (fixed && warm) { try { warm.peer.destroy(); } catch (x) {} warm = null; }
+    const w = fixed ? null : takeWarm();
+    roomCode = fixed || (w ? w.code : C.makeRoomCode(Math.random, 4)); peer = w ? w.peer : new Peer('synora-' + roomCode);
+    clearTimeout(connTimer);
+    if (!fixed) connTimer = setTimeout(() => { if (role !== 'host') failConnect('The connection server did not answer. Your internet may be fine; the free server may be busy. Try again in a minute.'); }, CONNECT_TIMEOUT);
+    const onOpen = () => { clearTimeout(connTimer); role = 'host'; left = false; alertMsg(''); showRoom(); log('room ' + roomCode + (fixed ? ' re-opened' : ' ready')); saveLast(); saveMeta(); broadcastDevs(); devTimer = setInterval(broadcastDevs, 1500); busy(false); };
+    peer.on('error', e => {
+      if (e.type === 'unavailable-id') {
+        const n = (tries || 0) + 1;
+        if (fixed && n <= 60) { alertMsg('Waiting for the old connection to clear (' + n + ')...'); try { peer.destroy(); } catch (x) {} setTimeout(() => startHost(n, fixed), 1000); return; }
+        if (!fixed && n <= 5) { startHost(n); return; }
+      }
+      log('network error: ' + e.type);
+      if (role === null) failConnect(friendly(e.type)); else { busy(false); alertMsg(friendly(e.type)); }
+    });
+    peer.on('connection', conn => {
+      conn.info = { name: 'Device', code: '', net: 'unknown', rtt: null, seen: now(), prog: {} };
+      conns.push(conn);
+      conn.on('open', () => log('a device is connecting'));
+      conn.on('data', async m => {
+        if (m.type === 'ping') { const t1 = now(); conn.info.net = m.net; conn.info.rtt = m.rtt; conn.info.seen = t1; conn.send({ type: 'pong', t0: m.t0, t1: t1, t2: now() }); }
+        else if (m.type === 'hello') { conn.send({ type: 'state', seq: seq, state: state }); conn.send({ type: 'meta', lib: lib, q: q }); const have = m.have || {}; for (const it of lib.slice()) { if (have[it.id] === it.name + '|' + it.size) conn.info.prog[it.id] = Math.max(conn.info.prog[it.id] || 0, 90); else await sendFile(conn, it.id); } }
+        else if (m.type === 'prog') conn.info.prog[m.id] = m.pct;
+        else if (m.type === 'prop-start') {
+          if (lib.length + Object.keys(pend).length >= MAXF) { conn.send({ type: 'prop-no', pid: m.pid, why: 'The room already has ' + MAXF + ' songs.' }); return; }
+          pend[m.pid] = { pid: m.pid, code: conn.info.code, dev: conn.info.name, name: m.name, size: m.size, total: m.total, parts: new Array(m.total), got: 0, done: false };
+        }
+        else if (m.type === 'prop-chunk' && pend[m.pid]) { const p = pend[m.pid]; p.parts[m.i] = new Uint8Array(m.data); p.got++; }
+        else if (m.type === 'prop-end' && pend[m.pid]) { pend[m.pid].done = pend[m.pid].got === pend[m.pid].total; broadcastDevs(); }
+        else if (m.type === 'prop-cancel' && pend[m.pid] && pend[m.pid].code === conn.info.code) { delete pend[m.pid]; broadcastDevs(); }
+        else if (m.type === 'ho-reply') {
+          if (hoPending && hoPending.conn === conn) {
+            clearTimeout(hoPending.timer);
+            if (m.ok) finishHandover(conn); else { hoPending = null; flash(conn.info.name + ' did not accept' + (m.why ? ' (' + m.why + ')' : '') + '.'); }
+          }
+        }
+        else if (m.type === 'id') {
+          if ((blocked[m.code] || 0) > Date.now()) { conn.send({ type: 'kicked', reason: 'blocked' }); setTimeout(() => conn.close(), 300); return; }
+          conns.filter(c => c !== conn && c.info.code === m.code).forEach(c => { try { c.close(); } catch (x) {} });
+          conns = conns.filter(c => c === conn || c.info.code !== m.code);
+          conn.info.code = m.code; conn.info.name = m.name; log(m.name + ' joined');
+        }
+      });
+      conn.on('close', () => { conns = conns.filter(c => c !== conn); log(conn.info.name + ' left'); });
+    });
+    if (peer.open) onOpen(); else peer.on('open', onOpen);
+  }
+  function startJoin(code) {
+    if (typeof Peer === 'undefined') { failConnect('The connection library did not load. Check the internet and refresh this page.'); return; }
+    const w = takeWarm();
+    roomCode = code; left = false; peer = w ? w.peer : new Peer();
+    clearTimeout(connTimer);
+    connTimer = setTimeout(() => { if (role !== 'receiver' && !left && peer) failConnect('Could not reach the host. Check the code and try again.'); }, CONNECT_TIMEOUT + 10000);
+    peer.on('error', e => {
+      log('network error: ' + e.type);
+      if (e.type !== 'peer-unavailable') { if (role === null) failConnect(friendly(e.type)); else { busy(false); alertMsg(friendly(e.type)); } return; }
+      if (left || !peer) return;
+      const first = role === null, limit = first ? 3 : 30;      // a wrong code stops after 3 tries; a lost host is retried for ~45 s
+      if (reconTries >= limit) {
+        if (first) failConnect('No room found with code ' + roomCode + '. Check the code, or ask the host to open the room.');
+        else alertMsg('Could not reach the host. Tap Back and join again.');
+        return;
+      }
+      reconTries++;
+      alertMsg(first ? 'Looking for the host (' + reconTries + ')...' : 'Host connection lost. Reconnecting (' + reconTries + ')...');
+      setTimeout(() => { if (peer && !left && !(hostConn && hostConn.open)) connectHost(); }, 1500);
+    });
+    if (peer.open) { setBusyText('Looking for the host...'); connectHost(); } else peer.on('open', () => { setBusyText('Looking for the host...'); connectHost(); });
+  }
+  function connectHost() {
+    {
+      if (peer.disconnected) { try { peer.reconnect(); } catch (e) {} }
+      const conn = hostConn = peer.connect('synora-' + roomCode, { reliable: true });
+      hostConn.on('open', () => { clearTimeout(connTimer); reconTries = 0; alertMsg(''); busy(false); lastPong = now(); samples = []; helloSent = false; conn.send({ type: 'id', code: myCode, name: myName() }); if (role !== 'receiver') { role = 'receiver'; showRoom(); } storedP = loadStored(roomCode); saveLast(); log('connected to host'); schedulePing(); });
+      hostConn.on('data', m => {
+        if (m.type === 'pong') onPong(m);
+        else if (m.type === 'state') { lastSeq = m.seq; state = m.state; if (state.status === 'playing') startSource(state.startHost, state.startPos); }
+        else if (m.type === 'kicked') { left = true; stopSource(); clearTimeout(pingTimer); alertMsg(m.reason === 'blocked' ? 'The host blocked this device for 5 minutes.' : 'The host removed this device.'); }
+        else if (m.type === 'meta') { lib = m.lib; q = m.q; pruneLocal(); renderLib(); renderCtl(); decodeStored(); }
+        else if (m.type === 'ho-offer') {
+          if (!lib.every(it => mine[it.id] === 100)) hostConn.send({ type: 'ho-reply', ok: false, why: 'songs not ready' });
+          else ask(m.name + ' wants you to take over as host of room ' + roomCode + '. Playback will pause.').then(ok => { if (hostConn && hostConn.open) hostConn.send({ type: 'ho-reply', ok: ok }); });
+        }
+        else if (m.type === 'prop-ok') {
+          const pr = myProps[m.pid];
+          if (pr) { bufs[m.id] = pr.buf; mine[m.id] = 100; localInfo[m.id] = pr.name + '|' + pr.size; saveFile(roomCode, m.id, pr.name, pr.size, pr.bytes); delete myProps[m.pid]; renderLib(); }
+        }
+        else if (m.type === 'prop-no') { delete myProps[m.pid]; flash(m.why || 'The host did not add that song.'); }
+        else if (m.type === 'ho-cancel') answer(false);
+        else if (m.type === 'ho-notice') { alertMsg('The host is changing to ' + m.name + '. Reconnecting...'); reconTries = 0; myProps = {}; }
+        else if (m.type === 'ho-data') becomeHost(m.snap);
+        else if (m.type === 'closed') { left = true; stopSource(); clearTimeout(pingTimer); alertMsg('The host closed the room. Songs cleared.'); idbAll().then(rs => idbDel(rs.filter(r => r.room === roomCode).map(r => r.k))).catch(() => {}); try { localStorage.removeItem('synora.last'); } catch (e) {} }
+        else if (m.type === 'devs') { devList = m.list; readySet = new Set(m.ready); props = m.props || []; renderDevs(); renderProps(); renderCtl(); }
+        else if (m.type === 'file-start') { rx[m.id] = { name: m.name, total: m.total, parts: new Array(m.total), got: 0 }; mine[m.id] = 0; }
+        else if (m.type === 'file-chunk' && rx[m.id]) {
+          const r = rx[m.id]; r.parts[m.i] = new Uint8Array(m.data); r.got++;
+          const pct = Math.floor(r.got / r.total * 90);
+          if (pct !== mine[m.id]) { mine[m.id] = pct; renderLib(); if (pct - (sent[m.id] || 0) >= 10) { sent[m.id] = pct; hostConn.send({ type: 'prog', id: m.id, pct: pct }); } }
+        }
+        else if (m.type === 'file-end' && rx[m.id]) finishFile(m.id);
+        else if (['play', 'pause', 'stop', 'seek'].indexOf(m.type) >= 0) handle(m);
+      });
+      hostConn.on('close', () => {
+        clearTimeout(pingTimer); stopSource();
+        if (left || !peer || conn !== hostConn) return;
+        alertMsg('Host connection lost. Reconnecting...');
+        setTimeout(() => { if (peer && !left && !(hostConn && hostConn.open)) connectHost(); }, 1000);
+      });
+    }
+  }
+  function leaveRoom() {
+    clearTimeout(pingTimer); clearInterval(devTimer); stopSource(); stopMeter();
+    const wasHost = role === 'host', code = roomCode, cs = conns.slice(), pr = peer;
+    if (wasHost) {
+      cs.forEach(c => { if (c.open) c.send({ type: 'closed' }); });
+      idbAll().then(rs => idbDel(rs.filter(r => r.room === code).map(r => r.k))).catch(() => {});
+      try { localStorage.removeItem('synora.room.' + code); } catch (e) {}
+    }
+    try { localStorage.removeItem('synora.last'); } catch (e) {}
+    if (hostConn) { try { hostConn.close(); } catch (e) {} }
+    setTimeout(() => { cs.forEach(c => { try { c.close(); } catch (e) {} }); if (pr) { try { pr.destroy(); } catch (e) {} } }, wasHost ? 400 : 0);
+    peer = null; hostConn = null; conns = []; role = null; roomCode = ''; devN = 0; counter = 0; left = false;
+    samples = []; offset = 0; helloSent = false; lastRtt = null; offsetAtPlay = null; state = C.initialState(); lastSeq = 0; seq = 0;
+    lib = []; q = { idx: 0, trackPlays: 1, trackReps: 1, listPlays: 1, listReps: 1, shuffle: false };
+    bufs = {}; mine = {}; raw = {}; rx = {}; sent = {}; devList = []; readySet = new Set(); blocked = {}; localInfo = {}; storedP = null; reconTries = 0; pend = {}; myProps = {}; props = []; jew = {}; usedMat = new Set(); pts = []; seg = null; errs = []; ratePpm = 0;
+    ['room', 'player', 'devs', 'props', 'lib', 'sync', 'tune', 'meter', 'graphSec', 'logSec', 'backRow'].forEach(id => { $(id).hidden = true; });
+    $('start').hidden = false; alertMsg(''); busy(false); setTimeout(warmUp, 1500);
+    ['offset', 'rtt', 'spread', 'drift', 'health'].forEach(id => { $(id).textContent = '-'; $(id).className = ''; });
+  }
+
+  // ---- Live graph (white line, frequency numbers) ---------------------------
+  function sample() {
+    if (!analyser) return;
+    analyser.getFloatTimeDomainData(td);
+    let v = 0; for (let i = 0; i < td.length; i++) v = Math.max(v, Math.abs(td[i]));
+    const t = hostNow(); let hz = null;
+    if (v > 0.03) { analyser.getFloatFrequencyData(fd); let m = 3; for (let i = 4; i < fd.length; i++) if (fd[i] > fd[m]) m = i; hz = Math.round(m * ctx.sampleRate / 1024); }
+    liveHz = hz; pts.push({ t: t, v: v, hz: hz });
+    while (pts.length && pts[0].t < t - GRAPH_MS) pts.shift();
+    let info = null;
+    if (!state.track && v > 0.1 && !spikeUp && state.status === 'playing') {
+      let k = 0; while (k < td.length && Math.abs(td[k]) <= 0.1) k++;
+      const p = C.positionAt(state, t - (td.length - k) / ctx.sampleRate * 1000, 120), e = (p - Math.round(p)) * 1000;
+      if (p > state.startPos + 1) { errs.push(e); if (errs.length > 12) errs.shift(); }
+      info = 'Last click: ' + hz + ' Hz, ' + (e >= 0 ? '+' : '') + e.toFixed(0) + ' ms from the timeline (about +/-15 ms, measured before the speaker)';
+    } else if (state.track && state.status === 'playing') info = 'Song playing. Numbers show the loudest frequency (Hz).';
+    if (info && $('pulseInfo').textContent !== info) $('pulseInfo').textContent = info;
+    spikeUp = v > 0.1;
+  }
+  function drawPulse() {
+    const c = $('pulse'), r = window.devicePixelRatio || 1, w = Math.round(c.clientWidth * r), h = Math.round(c.clientHeight * r);
+    if (c.width !== w || c.height !== h) { c.width = w; c.height = h; }
+    const g = c.getContext('2d'), t1 = hostNow(), t0 = t1 - GRAPH_MS, X = t => (t - t0) / GRAPH_MS * w, base = h * 0.88, amp = h * 0.66;
+    g.clearRect(0, 0, w, h);
+    if (!state.track && state.status === 'playing') {
+      g.strokeStyle = 'rgba(221,226,234,0.22)'; g.lineWidth = r;
+      const pA = state.startPos + (t0 - state.startHost) / 1000, pB = state.startPos + (t1 - state.startHost) / 1000;
+      for (let k = Math.ceil(Math.max(pA, state.startPos)); k <= Math.floor(pB); k++) { const x = X(state.startHost + (k - state.startPos) * 1000); g.beginPath(); g.moveTo(x, 0); g.lineTo(x, h); g.stroke(); }
+    }
+    g.strokeStyle = '#FFFFFF'; g.lineWidth = 1.5 * r; g.beginPath();
+    pts.forEach((p, i) => { const x = X(p.t), y = base - Math.min(1, p.v) * amp; if (i) g.lineTo(x, y); else g.moveTo(x, y); }); g.stroke();
+    g.fillStyle = '#FFFFFF'; g.font = (11 * r) + 'px sans-serif'; let last = -1e9;
+    for (let i = 1; i < pts.length - 1; i++) {
+      const p = pts[i];
+      if (p.hz && p.v > 0.15 && p.v >= pts[i - 1].v && p.v > pts[i + 1].v && p.t - last > 700) { last = p.t; g.fillText(p.hz + ' Hz', Math.min(X(p.t) + 3 * r, w - 52 * r), Math.max(24 * r, base - p.v * amp - 4 * r)); }
+    }
+    g.font = (12 * r) + 'px sans-serif'; g.fillText(liveHz ? 'Now: ' + liveHz + ' Hz' : 'Now: -', 8 * r, 14 * r);
+  }
+  (function loop() { if (!$('graphSec').hidden) { sample(); drawPulse(); } requestAnimationFrame(loop); })();
+
+  // ---- Buttons -----------------------------------------------------------
+  $('btnHost').onclick = async () => { busy(true, 'Opening your room...'); await ensureAudio(); startHost(0); };
+  $('btnJoin').onclick = async () => {
+    const code = $('code').value.trim().toUpperCase();
+    if (code.length !== 4) { alert('Enter the 4-character room code.'); return; }
+    busy(true, 'Contacting the server...'); await ensureAudio(); startJoin(code);
+  };
+  $('btnRehost').onclick = async () => {
+    const code = $('code').value.trim().toUpperCase();
+    if (code.length !== 4) { alert('Type the 4-character room code first.'); return; }
+    busy(true, 'Re-opening the room...'); await ensureAudio(); await restoreHost(code); startHost(0, code);
+  };
+  $('btnResume').onclick = async () => {
+    const l = lastRoom(); if (!l) return;
+    busy(true, 'Resuming the room...');
+    await ensureAudio();
+    if (l.role === 'host') { await restoreHost(l.code); startHost(0, l.code); } else { $('code').value = l.code; startJoin(l.code); }
+  };
+  { const l = lastRoom(); if (l) { $('resume').hidden = false; $('btnResume').textContent = 'Resume room ' + l.code + ' as ' + (l.role === 'host' ? 'host' : 'receiver'); } }
+  warmUp();
+  cleanOld(); setInterval(cleanOld, 600000); setInterval(touchRoom, 60000);
+  window.addEventListener('pagehide', e => { touchRoom(); if (e.persisted) return; try { if (peer) peer.destroy(); if (warm) warm.peer.destroy(); } catch (x) {} });
+  window.addEventListener('pageshow', e => { if (e.persisted) location.reload(); });
+  $('mYes').onclick = () => answer(true); $('mNo').onclick = () => answer(false);
+  // ---- Leaving: ice button, fire button, and a page that burns like real paper ----
+  const reducedMotion = () => !!(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches);
+  const fxl = { on: false };
+  function sizeCv(c) { const r = Math.min(2, window.devicePixelRatio || 1); c.width = Math.max(1, Math.round(c.clientWidth * r)); c.height = Math.max(1, Math.round(c.clientHeight * r)); const g = c.getContext('2d'); g.setTransform(r, 0, 0, r, 0, 0); return g; }
+  function flameParticle(x, y, big) { big = big || 1; const tall = Math.random() < 0.08; return { x: x, y: y, vx: (Math.random() - 0.5) * 16, vy: -(45 + Math.random() * 75) * big * (tall ? 1.3 : 1), life: 0, max: (0.45 + Math.random() * 0.6) * (tall ? 1.3 : 1), s: (5 + Math.random() * 8) * big, asp: tall ? 3.4 : 2, ph: Math.random() * 6.283, sw: 8 + Math.random() * 20 }; }
+  function stepFlame(f, dt) { f.life += dt; f.x += (f.vx + Math.sin(f.ph + f.life * 9) * f.sw) * dt; f.y += f.vy * dt; f.vy *= 1 - 0.4 * dt; }
+  function drawFlame(g, f) {                 // many soft glowing blobs: white-yellow core, orange body, red tips
+    const u = f.life / f.max, a = 1 - u, w = f.s * (1 - 0.55 * u), h = w * (f.asp || 2), core = u < 0.35 ? '255,238,170' : u < 0.65 ? '255,150,40' : '210,60,20';
+    const gr = g.createRadialGradient(0, 0, 0, 0, 0, h);
+    gr.addColorStop(0, 'rgba(' + core + ',' + (a * 0.95) + ')'); gr.addColorStop(0.5, 'rgba(255,110,25,' + (a * 0.5) + ')'); gr.addColorStop(1, 'rgba(180,30,10,0)');
+    g.save(); g.translate(f.x, f.y); g.scale(w / h, 1); g.fillStyle = gr; g.beginPath(); g.arc(0, 0, h, 0, 6.2832); g.fill(); g.restore();
+  }
+  function leaveFx() {                       // Leave: flames, embers, light; Stay: snow, frost, glints, mist, drips. Pressing a button makes it react.
+    const cf = $('fireCv'), cs = $('snowCv'); if (!cf || !cs) return;
+    const gf = sizeCv(cf), gs = sizeCv(cs), Wf = cf.clientWidth, Hf = cf.clientHeight, Ws = cs.clientWidth, Hs = cs.clientHeight, R = Math.random;
+    const fire = [], embers = [], snow = [], glints = [], mist = [], frost = [], drops = [], bursts = [];
+    let last = performance.now(), surge = 0, accF = 0, accE = 0, accM = 0, accFr = 0, accG = 0, accD = 0; fxl.on = true;
+    const bx0 = 30, bx1 = Ws - 30, by0 = 42, by1 = Hs - 26;      // where the Stay button sits inside its canvas
+    const newSnow = init => ({ x: R() * Ws, y: init ? R() * Hs : -4, r: 0.7 + R() * 2.3, vy: 14 + R() * 30, sw: 4 + R() * 10, ph: R() * 6.283 });
+    for (let i = 0; i < 42; i++) snow.push(newSnow(true));
+    $('lmYes').onpointerdown = () => { surge = 1; };
+    $('lmNo').onpointerdown = () => { for (let k = 0; k < 28; k++) { const a = R() * 6.283, v = 60 + R() * 90; bursts.push({ x: (bx0 + bx1) / 2, y: (by0 + by1) / 2, vx: Math.cos(a) * v, vy: Math.sin(a) * v, life: 0, max: 0.6 + R() * 0.5, r: 1 + R() * 2, ph: R() * 6.283 }); } };
+    const flake = (g, x, y, r, al) => { g.strokeStyle = 'rgba(230,246,255,' + al + ')'; g.lineWidth = 0.8; for (let k = 0; k < 3; k++) { const a = k * Math.PI / 3 + 0.4; g.beginPath(); g.moveTo(x - Math.cos(a) * r, y - Math.sin(a) * r); g.lineTo(x + Math.cos(a) * r, y + Math.sin(a) * r); g.stroke(); } };
+    (function loop(now) {
+      if (!fxl.on) return;
+      const dt = Math.min(0.05, (now - last) / 1000); last = now; surge = Math.max(0, surge - dt * 1.4);
+      // ---------- fire ----------
+      gf.clearRect(0, 0, Wf, Hf);
+      gf.globalCompositeOperation = 'lighter';
+      const lg = gf.createRadialGradient(Wf / 2, Hf - 10, 0, Wf / 2, Hf - 10, 80), li = 0.16 + 0.08 * Math.sin(now / 90) + 0.25 * surge;   // firelight
+      lg.addColorStop(0, 'rgba(255,120,30,' + li + ')'); lg.addColorStop(1, 'rgba(255,60,10,0)'); gf.fillStyle = lg; gf.fillRect(0, 0, Wf, Hf);
+      accF += dt * (150 + 420 * surge); while (accF >= 1) { accF--; fire.push(flameParticle(14 + R() * Math.max(1, Wf - 28), Hf - 10, 1 + 0.5 * surge)); }
+      accE += dt * (14 + 40 * surge); while (accE >= 1) { accE--; embers.push({ x: 10 + R() * Math.max(1, Wf - 20), y: Hf - 12, vx: (R() - 0.5) * 30, vy: -(70 + R() * 90), life: 0, max: 0.8 + R() * 1.0, r: 0.8 + R() * 1.6 }); }
+      for (let q = fire.length - 1; q >= 0; q--) { const f = fire[q]; stepFlame(f, dt); if (f.life >= f.max) fire.splice(q, 1); else drawFlame(gf, f); }
+      for (let q = embers.length - 1; q >= 0; q--) {
+        const e = embers[q]; e.life += dt; if (e.life >= e.max || e.y < -4) { embers.splice(q, 1); continue; }
+        e.x += (e.vx + Math.sin(e.life * 8 + q) * 12) * dt; e.y += e.vy * dt; const u = e.life / e.max;
+        gf.fillStyle = 'rgba(255,' + Math.round(210 - 120 * u) + ',' + Math.round(110 - 90 * u) + ',' + (1 - u) + ')'; gf.beginPath(); gf.arc(e.x, e.y, e.r * (1 - 0.4 * u), 0, 6.2832); gf.fill();
+      }
+      gf.globalCompositeOperation = 'source-over';
+      // ---------- ice and snow ----------
+      gs.clearRect(0, 0, Ws, Hs);
+      accM += dt; if (accM > 0.4) { accM = 0; mist.push({ x: bx0 + R() * (bx1 - bx0), y: by1 + 6 + R() * 10, vx: (R() - 0.5) * 14, life: 0, max: 2.6 + R() * 1.4, s: 14 + R() * 12 }); }
+      for (let q = mist.length - 1; q >= 0; q--) { const m = mist[q]; m.life += dt; if (m.life >= m.max) { mist.splice(q, 1); continue; } m.x += m.vx * dt; m.y -= 3 * dt; const u = m.life / m.max, rr = m.s * (1 + u), gr = gs.createRadialGradient(m.x, m.y, 0, m.x, m.y, rr); gr.addColorStop(0, 'rgba(205,235,255,' + (0.16 * Math.sin(Math.PI * u)) + ')'); gr.addColorStop(1, 'rgba(205,235,255,0)'); gs.fillStyle = gr; gs.beginPath(); gs.arc(m.x, m.y, rr, 0, 6.2832); gs.fill(); }
+      accFr += dt; if (accFr > 0.45 && frost.length < 7) {            // sharp frost crystals grow out from the edge
+        accFr = 0; const side = Math.floor(R() * 4), t = R(), out = [-Math.PI / 2, 0, Math.PI / 2, Math.PI][side], px = side % 2 ? (side === 1 ? bx1 : bx0) : bx0 + t * (bx1 - bx0), py = side % 2 ? by0 + t * (by1 - by0) : (side === 0 ? by0 : by1);
+        frost.push({ x: px, y: py, a: out + (R() - 0.5) * 0.9, L: 12 + R() * 14, t: 0, max: 1.8 + R() * 0.8 });
+      }
+      for (let q = frost.length - 1; q >= 0; q--) {
+        const f = frost[q]; f.t += dt; if (f.t >= f.max) { frost.splice(q, 1); continue; }
+        const p = Math.min(1, f.t / 0.7), al = f.t > f.max - 0.6 ? (f.max - f.t) / 0.6 : 1, L = f.L * p;
+        gs.strokeStyle = 'rgba(235,248,255,' + (0.95 * al) + ')'; gs.lineWidth = 1.2; gs.beginPath(); gs.moveTo(f.x, f.y); gs.lineTo(f.x + Math.cos(f.a) * L, f.y + Math.sin(f.a) * L); gs.stroke();
+        [0.45, 0.7].forEach(k => { const bxp = f.x + Math.cos(f.a) * L * k, byp = f.y + Math.sin(f.a) * L * k; [-0.95, 0.95].forEach(da => { gs.beginPath(); gs.moveTo(bxp, byp); gs.lineTo(bxp + Math.cos(f.a + da) * L * 0.4, byp + Math.sin(f.a + da) * L * 0.4); gs.stroke(); }); });
+      }
+      accG += dt; if (accG > 0.22) { accG = 0; glints.push({ x: bx0 + 8 + R() * (bx1 - bx0 - 16), y: by0 + 6 + R() * (by1 - by0 - 12), life: 0, max: 0.5 + R() * 0.3, r: 3 + R() * 4 }); }
+      for (let q = glints.length - 1; q >= 0; q--) { const gl = glints[q]; gl.life += dt; if (gl.life >= gl.max) { glints.splice(q, 1); continue; } const u = Math.sin(Math.PI * gl.life / gl.max), rr = gl.r * u; gs.strokeStyle = 'rgba(255,255,255,' + u + ')'; gs.lineWidth = 1; gs.beginPath(); gs.moveTo(gl.x - rr, gl.y); gs.lineTo(gl.x + rr, gl.y); gs.moveTo(gl.x, gl.y - rr); gs.lineTo(gl.x, gl.y + rr); gs.stroke(); }
+      accD += dt; if (accD > 1.3) { accD = 0; drops.push({ x: bx0 + (bx1 - bx0) * [0.14, 0.36, 0.6, 0.8][Math.floor(R() * 4)] + 3, y: by1 + 12, vy: 0, life: 0 }); }
+      for (let q = drops.length - 1; q >= 0; q--) { const d = drops[q]; d.life += dt; d.vy += 260 * dt; d.y += d.vy * dt; if (d.y > Hs) { drops.splice(q, 1); continue; } gs.fillStyle = 'rgba(200,235,255,.9)'; gs.beginPath(); gs.ellipse(d.x, d.y, 1.3, 2.4, 0, 0, 6.2832); gs.fill(); }
+      for (let q = bursts.length - 1; q >= 0; q--) { const b = bursts[q]; b.life += dt; if (b.life >= b.max) { bursts.splice(q, 1); continue; } b.x += b.vx * dt; b.y += b.vy * dt; b.vx *= 1 - 2 * dt; b.vy *= 1 - 2 * dt; flake(gs, b.x, b.y, b.r * 2.4, 1 - b.life / b.max); }
+      snow.forEach(s => {
+        s.y += s.vy * dt; s.x += Math.sin(s.ph + now / 600) * s.sw * dt; if (s.y > Hs + 4) Object.assign(s, newSnow(false));
+        gs.fillStyle = 'rgba(255,255,255,0.92)'; gs.beginPath(); gs.arc(s.x, s.y, s.r, 0, 6.2832); gs.fill();
+        if (s.r > 2) flake(gs, s.x, s.y, s.r * 1.9, 0.9);
+      });
+      requestAnimationFrame(loop);
+    })(last);
+  }
+  let leaveRes = null;
+  const askLeave = t => new Promise(res => { $('lmText').textContent = t; $('leaveModal').hidden = false; leaveRes = res; if (!reducedMotion()) requestAnimationFrame(leaveFx); });
+  const leaveAns = v => { fxl.on = false; $('leaveModal').hidden = true; if (leaveRes) { const r = leaveRes; leaveRes = null; r(v); } };
+
+  // The fire is different every time: it starts as black scorch spots, one flame comes out of one spot,
+  // then it spreads from that edge. Some fires also start on another edge later. Speed and lean are random.
+  function burnAndLeave(debug) {
+    try {
+      if (reducedMotion()) { leaveRoom(); return; }
+      const W = innerWidth, H = innerHeight, paper = $('paper'), fx = $('burnfx'), R = Math.random;
+      paper.innerHTML = '';
+      ['.bg', '.frame', 'main'].forEach(sel => {      // the "paper" is a copy of the page as it looks right now
+        const c = document.querySelector(sel).cloneNode(true);
+        c.querySelectorAll('[id]').forEach(e => e.removeAttribute('id')); c.removeAttribute('id');
+        if (sel === 'main') c.style.marginTop = (-window.scrollY) + 'px';
+        paper.appendChild(c);
+      });
+      const CS = 14, cols = Math.ceil(W / CS) + 1, rows = Math.ceil(H / CS) + 1;
+      const edge = side => side === 0 ? [R() * (cols - 1), 0] : side === 1 ? [cols - 1, R() * (rows - 1)] : side === 2 ? [R() * (cols - 1), rows - 1] : [0, R() * (rows - 1)];
+      const sides = [0, 1, 2, 3].sort(() => R() - 0.5), style = Math.floor(R() * 4);
+      const srcs = style === 0 ? [{ p: [R() < 0.5 ? 0 : cols - 1, R() < 0.5 ? 0 : rows - 1], d: 0 }]
+        : style === 1 ? [{ p: edge(sides[0]), d: 0 }]
+        : style === 2 ? [{ p: edge(sides[0]), d: 0 }, { p: edge((sides[0] + 2) % 4), d: 0.9 + R() * 1.2 }]
+        : [{ p: edge(sides[0]), d: 0 }, { p: edge(sides[1]), d: 0.8 + R() }, { p: edge(sides[2]), d: 1.8 + R() }];
+      const wind = [(R() - 0.5) * 1.2, -0.2 - R() * 0.6], dur = 4.2 + R() * 2, lead = 1.0;
+      const fuel = C.makeFuel(cols, rows, R, 0.5 + R() * 0.5), fields = srcs.map(s => C.burnFrom(cols, rows, fuel, s.p[0], s.p[1], wind));
+      let mx = 0; fields[0].forEach(v => { if (v > mx) mx = v; });
+      const sc = dur / mx, Ac = new Float32Array(cols * rows).fill(1e9);     // seconds until the fire reaches each cell
+      fields.forEach((f, k) => { for (let i = 0; i < Ac.length; i++) { const v = srcs[k].d + f[i] * sc; if (v < Ac[i]) Ac[i] = v; } });
+      for (let h = 0, nh = 6 + Math.floor(R() * 8); h < nh; h++) {   // paper also catches in small spots ahead of the fire
+        const cx = Math.floor(R() * cols), cy = Math.floor(R() * rows), th = Ac[cy * cols + cx] - (0.5 + R() * 0.9), spd = 55 + R() * 60;
+        if (th < 0.6) continue;
+        for (let dy = -9; dy <= 9; dy++) for (let dx = -9; dx <= 9; dx++) { const x = cx + dx, y = cy + dy; if (x < 0 || y < 0 || x >= cols || y >= rows) continue; const v = th + Math.hypot(dx, dy) * CS / spd, i = y * cols + x; if (v < Ac[i]) Ac[i] = v; }
+      }
+      let endT = 0; Ac.forEach(v => { if (v > endT) endT = v; });
+      srcs.forEach(s => { s.px = Math.min(W - 12, Math.max(12, s.p[0] * CS)); s.py = Math.min(H - 12, Math.max(12, s.p[1] * CS)); s.dec = [0, 1, 2].map(() => ({ x: (R() - 0.5) * 70, y: (R() - 0.5) * 70, r: 4 + R() * 7, o: R() * 0.5 })); });
+      const MS = 4, mw = Math.ceil(W / MS), mh = Math.ceil(H / MS), A = new Float32Array(mw * mh), jit = new Float32Array(mw * mh);
+      for (let py = 0; py < mh; py++) for (let px = 0; px < mw; px++) {   // smooth the coarse fire map and rough up the edge like torn paper
+        const gx = px * MS / CS, gy = py * MS / CS, x0 = Math.min(cols - 2, Math.floor(gx)), y0 = Math.min(rows - 2, Math.floor(gy)), fxr = gx - x0, fyr = gy - y0, i0 = y0 * cols + x0;
+        A[py * mw + px] = (Ac[i0] * (1 - fxr) + Ac[i0 + 1] * fxr) * (1 - fyr) + (Ac[i0 + cols] * (1 - fxr) + Ac[i0 + cols + 1] * fxr) * fyr;
+        jit[py * mw + px] = (R() - 0.5) * 0.12 + Math.sin(px * 0.55 + py * 0.31) * 0.03 + Math.sin(px * 0.17 - py * 0.23) * 0.05;
+      }
+      const mkc = () => { const c = document.createElement('canvas'); c.width = mw; c.height = mh; return c; };
+      const maskCv = mkc(), mg = maskCv.getContext('2d'), mimg = mg.createImageData(mw, mh), ovCv = mkc(), og = ovCv.getContext('2d'), oimg = og.createImageData(mw, mh);
+      const dpr = Math.min(2, window.devicePixelRatio || 1); fx.width = W * dpr; fx.height = H * dpr;
+      const g = fx.getContext('2d'); g.setTransform(dpr, 0, 0, dpr, 0, 0);
+      let tfNow = -1;
+      const maskOK = !!(window.CSS && CSS.supports && (CSS.supports('mask-image', 'url(x)') || CSS.supports('-webkit-mask-image', 'url(x)')));
+      const setMask = () => { if (!maskOK) { paper.style.opacity = String(Math.max(0, 1 - Math.max(0, tfNow + 0.2) / (endT + 0.5))); return; } mg.putImageData(mimg, 0, 0); const u = 'url(' + maskCv.toDataURL() + ')'; paper.style.webkitMaskImage = u; paper.style.maskImage = u; };
+      mimg.data.fill(255); setMask(); paper.style.webkitMaskSize = '100% 100%'; paper.style.maskSize = '100% 100%';
+      paper.hidden = false; fx.hidden = false;
+      if (debug) document.querySelector('main').style.visibility = 'hidden';      // preview: show the plain background underneath
+      else leaveRoom();
+      window.scrollTo(0, 0);                 // the home page is now underneath
+      const flames = [], smoke = [], ash = []; let last = performance.now(); const t0 = last; let frameNo = 0, maxDt = 0;
+      const blot = (x, y, r) => { const gr = g.createRadialGradient(x, y, 0, x, y, r); gr.addColorStop(0, 'rgba(10,5,2,.95)'); gr.addColorStop(0.6, 'rgba(60,30,10,.8)'); gr.addColorStop(1, 'rgba(90,45,15,0)'); g.fillStyle = gr; g.beginPath(); g.arc(x, y, r, 0, 6.2832); g.fill(); };
+      function done() {
+        document.querySelector('main').style.visibility = '';
+        if (debug) { const sec = (performance.now() - t0) / 1000; flash('Preview finished: ' + frameNo + ' frames in ' + sec.toFixed(1) + ' s (about ' + Math.round(sec * 1000 / Math.max(1, frameNo)) + ' ms per frame, slowest ' + Math.round(maxDt) + ' ms). Edge mask: ' + (maskOK ? 'on' : 'off, using a fade') + '.', 15000); }
+        paper.style.opacity = ''; paper.hidden = true; paper.innerHTML = ''; paper.style.webkitMaskImage = ''; paper.style.maskImage = ''; fx.hidden = true; }
+      function frame(now) {
+       try {
+        const ts = (now - t0) / 1000, dt = Math.min(0.05, (now - last) / 1000), tf = ts - lead; maxDt = Math.max(maxDt, now - last); last = now; frameNo++; tfNow = tf;
+        const md = mimg.data, od = oimg.data, front = [];
+        for (let i = 0; i < A.length; i++) {
+          const d = A[i] + jit[i] - tf, o = i * 4; let r = 0, gg = 0, b = 0, a = 0;
+          md[o + 3] = d > 0 ? 255 : 0;
+          if (d > 0) {                               // paper not burnt yet: it browns and chars as the fire comes close
+            if (d < 0.5) {
+              const k = 1 - d / 0.5; a = 0.95 * k * Math.sqrt(k); r = 90 - 75 * k; gg = 45 - 37 * k; b = 15 - 11 * k;
+              if (d < 0.16) { const h = (1 - d / 0.16) * 0.8 * (0.8 + 0.2 * Math.sin(ts * 16 + jit[i] * 50)); r += (255 - r) * h; gg += (115 - gg) * h; b += (20 - b) * h; a = Math.max(a, h * 0.85); }
+            }
+            if (d < 0.04) front.push(i);
+          } else if (d > -0.16) {                    // the glowing edge: white-yellow, then orange, then dark red embers
+            const k = 1 + d / 0.16, kk = k * (0.75 + 0.25 * Math.sin(ts * 14 + jit[i] * 60)); a = 0.95 * kk;
+            if (kk > 0.75) { r = 255; gg = 230; b = 140; } else if (kk > 0.4) { r = 255; gg = 135; b = 25; } else { r = 170; gg = 35; b = 10; }
+            if (d > -0.03) front.push(i);
+          }
+          od[o] = r; od[o + 1] = gg; od[o + 2] = b; od[o + 3] = a * 255;
+        }
+        if (frameNo % 2 === 1) setMask();
+        og.putImageData(oimg, 0, 0); g.clearRect(0, 0, W, H); g.imageSmoothingEnabled = true; g.drawImage(ovCv, 0, 0, W, H);
+        srcs.forEach((s, k) => {                     // black spots first, then ONE flame comes out of the spot
+          const u = (tf - (s.d - 0.9)) / 0.9;
+          if (u > 0 && tf < s.d + 0.35) {
+            const uu = Math.min(1, u);
+            s.dec.forEach(dc => { const q = Math.min(1, Math.max(0, uu * 1.3 - dc.o)); if (q > 0) blot(s.px + dc.x, s.py + dc.y, dc.r * q); });
+            blot(s.px, s.py, 3 + 20 * uu);
+            const gl = g.createRadialGradient(s.px, s.py, 0, s.px, s.py, 18), fl = (0.25 + 0.55 * uu) * (0.75 + 0.25 * Math.sin(ts * 25 + k * 2));
+            gl.addColorStop(0, 'rgba(255,140,40,' + fl + ')'); gl.addColorStop(1, 'rgba(255,60,10,0)'); g.fillStyle = gl; g.beginPath(); g.arc(s.px, s.py, 18, 0, 6.2832); g.fill();
+          }
+          if (tf >= s.d && tf < s.d + 0.5 && flames.length < 600) flames.push(flameParticle(s.px + (R() - 0.5) * 6, s.py, 1.6));
+        });
+        if (front.length) {                          // flames, sparks and smoke along the burning edge
+          const n = Math.min(34, 3 + (front.length >> 3));
+          for (let q = 0; q < n && flames.length < 700; q++) { const i = front[Math.floor(R() * front.length)]; flames.push(flameParticle((i % mw) * MS + R() * MS, Math.floor(i / mw) * MS, 1.25)); }
+          if (smoke.length < 120) { const i = front[Math.floor(R() * front.length)]; smoke.push({ x: (i % mw) * MS, y: Math.floor(i / mw) * MS, vx: (R() - 0.5) * 10, vy: -(14 + R() * 22), life: 0, max: 1.2 + R() * 0.9, s: 10 + R() * 16 }); }
+        }
+        for (let q = smoke.length - 1; q >= 0; q--) {
+          const m = smoke[q]; m.life += dt; if (m.life >= m.max) { smoke.splice(q, 1); continue; }
+          m.x += m.vx * dt; m.y += m.vy * dt; m.s += 8 * dt;
+          const u = m.life / m.max, gr = g.createRadialGradient(m.x, m.y, 0, m.x, m.y, m.s);
+          gr.addColorStop(0, 'rgba(70,60,55,' + (0.14 * (1 - u)) + ')'); gr.addColorStop(1, 'rgba(70,60,55,0)'); g.fillStyle = gr; g.beginPath(); g.arc(m.x, m.y, m.s, 0, 6.2832); g.fill();
+        }
+        for (let q = 0; q < 4 && ash.length < 160; q++) {      // flakes of ash lift off the burnt part
+          const i = Math.floor(R() * A.length), d = A[i] + jit[i] - tf;
+          if (d < -0.3 && d > -1.4) ash.push({ x: (i % mw) * MS, y: Math.floor(i / mw) * MS, vx: (R() - 0.5) * 22, vy: -(18 + R() * 40), rot: R() * 6.28, vr: (R() - 0.5) * 5, life: 0, max: 1.2 + R() * 1.4, s: 1.5 + R() * 3 });
+        }
+        for (let q = ash.length - 1; q >= 0; q--) {
+          const f = ash[q]; f.life += dt; if (f.life >= f.max) { ash.splice(q, 1); continue; }
+          f.x += (f.vx + Math.sin(f.life * 5 + f.rot) * 10) * dt; f.y += f.vy * dt; f.rot += f.vr * dt;
+          g.save(); g.translate(f.x, f.y); g.rotate(f.rot); g.fillStyle = 'rgba(35,30,28,' + (0.7 * (1 - f.life / f.max)) + ')'; g.fillRect(-f.s, -f.s * 0.6, f.s * 2, f.s * 1.2); g.restore();
+        }
+        g.globalCompositeOperation = 'lighter';
+        for (let q = flames.length - 1; q >= 0; q--) { const f = flames[q]; stepFlame(f, dt); if (f.life >= f.max) flames.splice(q, 1); else drawFlame(g, f); }
+        g.globalCompositeOperation = 'source-over';
+        if (tf < endT + 0.9 || flames.length) requestAnimationFrame(frame); else { setMask(); done(); }
+       } catch (err) { done(); flash('Animation problem: ' + err.message, 12000); }
+      }
+      requestAnimationFrame(frame);
+    } catch (e) { try { $('paper').hidden = true; $('burnfx').hidden = true; document.querySelector('main').style.visibility = ''; } catch (x) {} if (role && !debug) leaveRoom(); flash('Animation problem: ' + e.message, 12000); }
+  }
+  $('btnPreview').onclick = () => burnAndLeave(true);
+  $('lmYes').onclick = () => leaveAns(true); $('lmNo').onclick = () => leaveAns(false);
+  $('btnCancel').onclick = () => failConnect('');
+  $('btnLeave').onclick = async () => { if (!await askLeave(role === 'host' ? 'Close the room? Uploaded songs will be cleared for everyone.' : 'Leave the room?')) return; burnAndLeave(); };
+  $('btnCopy').onclick = async () => {
+    try { await navigator.clipboard.writeText($('link').textContent); $('btnCopy').textContent = 'Copied'; setTimeout(() => { $('btnCopy').textContent = 'Copy link'; }, 1500); }
+    catch (e) { log('Could not copy. Select the link and copy it by hand.'); }
+  };
+  $('btnPlay').onclick = togglePlay; $('btnPrev').onclick = () => skipTrack(-1); $('btnNext').onclick = () => skipTrack(1);
+  $('btnShuf').onclick = () => { q = Object.assign({}, q, { shuffle: !q.shuffle }); pushMeta(); const rdy = lib.map((x, i) => i).filter(i => isReady(lib[i].id)); if (q.shuffle && rdy.length) playIdx(rdy[Math.floor(Math.random() * rdy.length)], 0); };
+  $('btnRepEach').onclick = () => { q = Object.assign({}, q, { trackReps: q.trackReps % 3 + 1 }); pushMeta(); };
+  $('btnRepAll').onclick = () => { q = Object.assign({}, q, { listReps: q.listReps % 3 + 1 }); pushMeta(); };
+  $('seek').onchange = () => {
+    if (role !== 'host') return;
+    const f = $('seek').value / 1000;
+    if (state.status === 'idle') { const i = Math.min(q.idx, lib.length - 1); if (lib.length && isReady(lib[i].id)) playIdx(i, f * durOf(lib[i].id)); return; }
+    send({ type: 'seek', pos: f * durOf(state.track), startHost: now() + LEAD });
+  };
+  $('devList').onclick = e => {
+    const b = e.target.closest('button'); if (!b || role !== 'host') return;
+    const c = conns.find(x => x.info.code && x.info.code === b.dataset.c); if (!c) return;
+    if (b.dataset.a === 'mk') { startHandover(c); return; }
+    const bl = b.dataset.a === 'bl';
+    if (!confirm((bl ? 'Block ' : 'Remove ') + c.info.name + (bl ? ' for 5 minutes?' : ' from the room?'))) return;
+    if (bl) blocked[c.info.code] = Date.now() + 300000;
+    c.send({ type: 'kicked', reason: bl ? 'blocked' : 'removed' }); setTimeout(() => c.close(), 300);
+    log(c.info.name + (bl ? ' blocked for 5 minutes' : ' removed'));
+  };
+  $('vol').oninput = () => { if (gain) gain.gain.value = $('vol').value / 100; };
+  $('file').onchange = async e => { const f = Array.from(e.target.files); e.target.value = ''; if (role === 'host') await addFiles(f); else await suggestFiles(f); };
+  $('propList').onclick = e => {
+    const b = e.target.closest('button'); if (!b) return;
+    const pid = b.dataset.p, a = b.dataset.a;
+    if (role === 'host') { if (a === 'add') approve(pid); else reject(pid, 'The host did not add that song.'); }
+    else if (a === 'no' && myProps[pid]) { hostConn.send({ type: 'prop-cancel', pid: pid }); delete myProps[pid]; }
+  };
+  $('libList').onclick = e => {
+    const b = e.target.closest('button'); if (!b || role !== 'host') return;
+    const i = +b.dataset.i, a = b.dataset.a;
+    if (a === 'play') { if (isReady(lib[i].id)) playIdx(i, 0); else log('That song is still loading on some devices'); return; }
+    if (a === 'rm') { removeSong(i); return; }
+    const cid = curId(); lib = C.moveItem(lib, i, a === 'up' ? -1 : 1); q = Object.assign({}, q, { idx: Math.max(0, lib.findIndex(x => x.id === cid)) }); pushMeta();
+  };
+  document.querySelectorAll('.nudge').forEach(b => { b.onclick = () => setTrim(trimMs + +b.dataset.n); });
+  $('btnTrim0').onclick = () => setTrim(0);
+  $('btnCal').onclick = () => {
+    if (state.track || state.status !== 'playing') { log('Calibrate: the host must play the click track (no song) first'); return; }
+    if (errs.length < 6) { log('Calibrate: wait a few more clicks, then try again'); return; }
+    const m = C.median(errs.slice(-10)); setTrim(trimMs + m); log('calibrated: this phone was ' + m.toFixed(0) + ' ms late; trim is now ' + trimMs.toFixed(1) + ' ms');
+  };
+  $('trim').textContent = trimMs.toFixed(1) + ' ms';
+  setInterval(control, 1000);
+  const params = new URLSearchParams(location.search);
+  if (params.get('join')) $('code').value = params.get('join').toUpperCase();
+
+  setInterval(() => {
+    if (role === null) return;
+    const tid = state.status === 'idle' && lib[q.idx] ? lib[q.idx].id : state.track, dur = durOf(tid), p = C.positionAt(state, hostNow(), dur);
+    $('pos').textContent = fmt(p) + ' / ' + fmt(dur);
+    if (document.activeElement !== $('seek')) $('seek').value = dur ? Math.round(p / dur * 1000) : 0;
+    const it = state.status === 'idle' ? null : lib.find(x => x.id === state.track);
+    $('nowName').textContent = state.status === 'idle' ? 'Nothing playing' : it ? it.name : state.track === 'meter' ? 'Sync meter signal' : 'Built-in click track';
+    $('btnPlay').innerHTML = state.status === 'playing' ? '&#10074;&#10074;' : '&#9654;';
+    if (role === 'host' && state.status === 'playing') autoAdvance();
+    $('rate').textContent = (ratePpm >= 0 ? '+' : '') + ratePpm.toFixed(0) + ' ppm';
+    if (role === 'receiver') {
+      if (offsetAtPlay !== null && state.status === 'playing') $('drift').textContent = (offset - offsetAtPlay).toFixed(1) + ' ms';
+      if (!left && hostConn && hostConn.open) alertMsg(now() - lastPong > 6000 ? 'Host network is low. Waiting for the host...' : '');
+    }
+  }, 100);
+})();
+</script>
+</body>
+</html>
